@@ -1,0 +1,8 @@
+services:
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD:-root}
+      - MYSQL_DATABASE=${DATABASE_NAME:-alocacao-de-salas}
+    ports:
+      - "${DATABASE_PORT:-3456}:3306"
