@@ -4,8 +4,7 @@ public enum RoomType {
     CLASSROOM,
     LABORATORY,
     AUDITORIUM,
-    BOARD,
-    SECRETARY,
-    LIBRARY,
-    TEACHERS_OFFICE
+    SPORTS_COURT,
+    COURTYARD,
+    GREEN_AREA
 }

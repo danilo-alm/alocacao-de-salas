@@ -1,4 +1,4 @@
-package com.ufal.alocacaodesalasbackend.service.user;
+package com.ufal.alocacaodesalasbackend.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {
