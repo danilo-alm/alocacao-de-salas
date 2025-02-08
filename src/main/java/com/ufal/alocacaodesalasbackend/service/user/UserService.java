@@ -4,6 +4,7 @@ import com.ufal.alocacaodesalasbackend.domain.User;
 import com.ufal.alocacaodesalasbackend.domain.authority.Authority;
 import com.ufal.alocacaodesalasbackend.dto.UserRequestDTO;
 import com.ufal.alocacaodesalasbackend.dto.UserResponseDTO;
+import com.ufal.alocacaodesalasbackend.exception.user.UserNotFoundException;
 import com.ufal.alocacaodesalasbackend.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
