@@ -10,6 +10,8 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      # The 'Validate' option checks whether the database schema matches Hibernate entities:
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: ${HIBERNATE_FORMAT_SQL:true}
