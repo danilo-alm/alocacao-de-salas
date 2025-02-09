@@ -20,55 +20,43 @@ erDiagram
     }
 
     AUTHORITY {
-        BIGINT user_id PK,FK "NOT NULL"
-        VARCHAR authority PK "NOT NULL (50)"
-    }
-
-    AUTHORITY_ID {
-        BIGINT user_id PK,FK "NOT NULL"
-        VARCHAR authority PK "NOT NULL (50)"
+        BIGINT user_id FK "NOT NULL"
+        VARCHAR authority "NOT NULL (50)"
     }
 
     ROOM {
-        BIGINT id PK "AUTO_INCREMENT"
+        BIGINT id PK "SEQUENCE"
         VARCHAR name "NOT NULL UNIQUE (100)"
         VARCHAR type "NOT NULL (50)"
     }
-    
+
     ALLOCATION {
-        BIGINT user_id PK, FK
-        BIGINT room_id PK, FK
-        BIGINT time_id PK, FK
-        VARCHAR description
-    }
-    
-    TIME {
-        BIGINT id PK
+        BIGINT user_id FK "NOT NULL"
+        BIGINT room_id FK "NOT NULL"
         TIMESTAMP startTime
         TIMESTAMP endTime
+        VARCHAR description
     }
 
     USER ||--|{ AUTHORITY : has
-    AUTHORITY ||--|| AUTHORITY_ID : composed_of
-    USER ||--o{ ALLOCATION : has
-    ALLOCATION ||--|| ROOM : of
-    TIME ||--|| ALLOCATION : for
-    
-    
+    USER ||--o{ ALLOCATION : makes
+    ROOM ||--o{ ALLOCATION : of
 ````
 
-<!--
-
-E
 ---
-Usuário
-Autoridade
-Sala
-Tempo
 
-R
----
-Alocação
+### Comandos frequentes
 
-
--->
+- Se houve alterações no arquivo [compose.yaml](compose.yaml), atualizar as configurações:
+  ````shell
+  docker-compose up -d --build
+  ````
+- Para reconstruir e reiniciar o contâiner do Docker, para atualizar quaisquer alterações do repositório:
+  ````shell
+  docker-compose down
+  docker-compose up -d --build
+  ````
+- Verificar execução do Docker: ``docker info``
+- Verificar containers: ``docker ps -a``
+- Listar contâiners e ids: ``docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"``
+- Acessar banco: ``docker exec -it <NOME_DO_CONTAINER> mariadb -u root -p``

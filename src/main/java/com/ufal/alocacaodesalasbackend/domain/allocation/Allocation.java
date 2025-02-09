@@ -9,11 +9,13 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(
-        name = "Allocation",
+        name = "allocation",
         indexes = {
                 @Index(name = "IX_Allocation_Identifier", columnList = "Identifier")
         },
-        uniqueConstraints = {}
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UX_Allocations_UserId_RoomId_Allocation", columnNames = {"userId", "roomId", "allocation"})
+        }
 )
 @Getter
 @Setter
@@ -23,18 +25,18 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Builder
 @EqualsAndHashCode
-@SequenceGenerator(name = "alloc_seq", sequenceName = "allocation_sequence", allocationSize = 1)
+@IdClass(value = AllocationId.class)
 public class Allocation {
     @EmbeddedId
     private AllocationId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("roomId")
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false, updatable = false, columnDefinition = "BIGINT UNSIGNED NOT NULL", foreignKey = @ForeignKey(name = "FK_Allocations_Rooms"))
     private Room room;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false, columnDefinition = "BIGINT UNSIGNED NOT NULL", foreignKey = @ForeignKey(name = "FK_Allocations_Users"))
     private User user;
 }

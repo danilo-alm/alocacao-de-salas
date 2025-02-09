@@ -18,5 +18,5 @@ public class AllocationId implements Serializable {
     private BigInteger room;
 
     @Column(name = "user_id")
-    private Long user;
+    private BigInteger user;
 }
