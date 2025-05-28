@@ -1,6 +1,7 @@
+import { Type } from '@nestjs/class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
-import { Type } from '@nestjs/class-transformer';
+
 import { SalaResponseDto } from '../sala/dto/sala-response.dto';
 
 export class BlocoEntity {

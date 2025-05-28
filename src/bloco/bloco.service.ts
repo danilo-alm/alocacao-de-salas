@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from '@nestjs/class-transformer';
-import { Prisma, PrismaClient, Bloco } from '../generated/prisma/client';
-import { CreateBlocoDto } from './dto/create-bloco.dto';
-import { UpdateBlocoDto } from './dto/update-bloco.dto';
-import { BlocoJaExisteException } from './exception/bloco-ja-existe-exception';
-import { BlocoNaoExisteException } from './exception/bloco-nao-existe-exception';
-import { BlocoPossuiSalasException } from './exception/bloco-possui-salas-exception';
+import { DtoMapper } from 'src/common/dto/dto-mapper';
+import { EntityDoesNotExistException } from 'src/common/exceptions/entity-does-not-exist-exception';
+import { EntityExistsException } from 'src/common/exceptions/entity-exists-exception';
+import { EntityHasDependantsException } from 'src/common/exceptions/entity-has-dependants-exception.ts';
+import { Bloco, Prisma, PrismaClient } from 'src/generated/prisma/client';
+
 import { BlocoResponseDto } from './dto/bloco-response.dto';
 import { BlocoResponseWithSalasDto } from './dto/bloco-response-with-salas.dto';
+import { CreateBlocoDto } from './dto/create-bloco.dto';
+import { UpdateBlocoDto } from './dto/update-bloco.dto';
 
 @Injectable()
 export class BlocoService {
@@ -22,13 +23,13 @@ export class BlocoService {
       const result = await this.prisma.bloco.create({
         data: createBlocoDto,
       });
-      return this.toDto(result);
+      return DtoMapper.toDto(BlocoResponseDto, result);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new BlocoJaExisteException();
+        throw new EntityExistsException('Já existe um bloco com este nome');
       }
       throw error;
     }
@@ -36,48 +37,60 @@ export class BlocoService {
 
   async findAll(): Promise<BlocoResponseDto[]> {
     const result = await this.prisma.bloco.findMany();
-    return this.toDto(result);
+    return DtoMapper.toDto(BlocoResponseDto, result);
   }
 
   async findOne(id: number): Promise<BlocoResponseWithSalasDto> {
     const result = await this.prisma.bloco.findUnique({
       where: { Id: id },
+      include: { Salas: true },
     });
 
     if (!result) {
-      throw new BlocoNaoExisteException();
+      throw new EntityDoesNotExistException('Bloco não encontrado');
     }
 
-    return this.toDtoWithSalas(result);
+    return DtoMapper.toDto(BlocoResponseWithSalasDto, result);
   }
 
-  async findByName(match: string): Promise<BlocoResponseDto[]> {
+  async findByNameContains(search: string): Promise<BlocoResponseDto[]> {
     const result = await this.prisma.bloco.findMany({
       where: {
         Nome: {
-          contains: match,
+          contains: search,
           // mode: 'insensitive',  // not required with mysql
         },
       },
     });
 
-    return this.toDto(result);
+    return DtoMapper.toDto(BlocoResponseDto, result);
   }
 
   async update(
     id: number,
     updateBlocoDto: UpdateBlocoDto,
   ): Promise<BlocoResponseDto> {
-    const result = await this.prisma.bloco.update({
-      where: { Id: id },
-      data: updateBlocoDto,
-    });
-
-    if (!result) {
-      throw new BlocoNaoExisteException();
+    let result: Bloco;
+    try {
+      result = await this.prisma.bloco.update({
+        where: { Id: id },
+        data: updateBlocoDto,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new EntityExistsException('Já existe um bloco com este nome');
+      }
+      throw error;
     }
 
-    return this.toDto(result);
+    if (!result) {
+      throw new EntityDoesNotExistException('Bloco não encontrado');
+    }
+
+    return DtoMapper.toDto(BlocoResponseDto, result);
   }
 
   async remove(id: number): Promise<BlocoResponseDto> {
@@ -85,31 +98,19 @@ export class BlocoService {
       const result = await this.prisma.bloco.delete({
         where: { Id: id },
       });
-      return this.toDto(result);
+      return DtoMapper.toDto(BlocoResponseDto, result);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         switch (error.code) {
           case 'P2025':
-            throw new BlocoNaoExisteException();
+            throw new EntityDoesNotExistException('Bloco não encontrado');
           case 'P2014':
-            throw new BlocoPossuiSalasException();
+            throw new EntityHasDependantsException(
+              'Não é possível deletar um bloco que possui salas associadas',
+            );
         }
       }
       throw error;
     }
-  }
-
-  private toDto(data: Bloco): BlocoResponseDto;
-  private toDto(data: Bloco[]): BlocoResponseDto[];
-  private toDto(data: Bloco | Bloco[]): BlocoResponseDto | BlocoResponseDto[] {
-    return plainToClass(BlocoResponseDto, data, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  private toDtoWithSalas(data: Bloco): BlocoResponseWithSalasDto {
-    return plainToClass(BlocoResponseWithSalasDto, data, {
-      excludeExtraneousValues: true,
-    });
   }
 }
