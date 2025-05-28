@@ -29,7 +29,8 @@ export class BlocoService {
         error.code === 'P2002'
       ) {
         throw new BlocoJaExisteException();
-      } else throw error;
+      }
+      throw error;
     }
   }
 
