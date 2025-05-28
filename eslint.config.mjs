@@ -1,6 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin'
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -28,7 +29,8 @@ export default tseslint.config(
   },
   {
     plugins: {
-      '@stylistic': stylistic
+      '@stylistic': stylistic,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
@@ -39,7 +41,9 @@ export default tseslint.config(
         'code': 80,
         'ignoreUrls': true,
         'ignoreStrings': true,
-      }]
+      }],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
 );
