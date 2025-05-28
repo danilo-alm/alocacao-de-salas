@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma/client"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../src/generated/prisma/ERD.svg"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model TipoSala {
+  Id    Int    @id @default(autoincrement())
+  Nome  String @unique
+  Salas Sala[]
+}
+
+model Bloco {
+  Id    Int    @id @default(autoincrement())
+  Nome  String @unique
+  Salas Sala[]
+}
+
+model Sala {
+  Id         Int      @id @default(autoincrement())
+  Codigo     String   @unique
+  TipoId     Int
+  Tipo       TipoSala @relation(fields: [TipoId], references: [Id])
+  BlocoId    Int
+  Bloco      Bloco    @relation(fields: [BlocoId], references: [Id])
+  Capacidade Int
+
+  Alocacoes Alocacao[]
+
+  CreatedAt DateTime @default(now()) @db.Timestamp(2)
+  UpdatedAt DateTime @updatedAt @db.Timestamp(2)
+
+  @@index([TipoId])
+  @@index([BlocoId])
+  @@index([Capacidade])
+}
+
+model Alocacao {
+  Id          Int       @id @default(autoincrement())
+  Data        DateTime? @db.Date
+  DiaDaSemana Int?      @db.TinyInt // 0 (Domingo) a 6 (Sábado)
+  HoraInicio  String // formatada tipo "08:00"
+  HoraFim     String // formatada tipo "10:00"
+
+  SalaId Int
+  Sala   Sala @relation(fields: [SalaId], references: [Id])
+
+  CreatedAt DateTime  @default(now()) @db.Timestamp(2)
+  UpdatedAt DateTime  @updatedAt @db.Timestamp(2)
+  DeletedAt DateTime? @db.Timestamp(2)
+  // Overlapping prevention still needs to be handled in the application logic
+
+  @@unique([SalaId, Data, HoraInicio, HoraFim]) // Prevent double-booking
+  @@index([SalaId])
+}
