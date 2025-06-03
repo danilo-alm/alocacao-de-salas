@@ -6,6 +6,5 @@ import { TipoSalaService } from './tipo-sala.service';
 @Module({
   controllers: [TipoSalaController],
   providers: [TipoSalaService],
-  exports: [TipoSalaService],
 })
 export class TipoSalaModule {}
