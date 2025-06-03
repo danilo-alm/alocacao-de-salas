@@ -62,7 +62,7 @@ export function FindAllDocs() {
 export function FindOneDocs() {
   return applyDecorators(
     Get(':id'),
-    ApiOperation({ summary: 'Buscar um tipo de sala por id' }),
+    ApiOperation({ summary: 'Buscar um tipo de sala por ID' }),
     ApiParam({
       name: 'id',
       description: 'ID do tipo de sala',
@@ -87,7 +87,7 @@ export function UpdateDocs() {
     ApiOperation({ summary: 'Atualizar um tipo de sala' }),
     ApiParam({
       name: 'id',
-      description: 'ID do tipo de sala',
+      description: 'ID do tipo de sala a ser atualizado',
       example: 3,
       type: 'number',
     }),
@@ -124,7 +124,7 @@ export function RemoveDocs() {
     ApiOperation({ summary: 'Remover um tipo de sala' }),
     ApiParam({
       name: 'id',
-      description: 'ID do tipo de sala',
+      description: 'ID do tipo de sala a ser removido',
       example: 4,
       type: 'number',
     }),
