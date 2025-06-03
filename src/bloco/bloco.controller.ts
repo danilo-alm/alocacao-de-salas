@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -49,23 +50,25 @@ export class BlocoController {
 
   @Get(':id')
   @FindOneDocs()
-  async findOne(@Param('id') id: string): Promise<BlocoResponseWithSalasDto> {
-    return this.blocoService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<BlocoResponseWithSalasDto> {
+    return this.blocoService.findOne(id);
   }
 
   @Patch(':id')
   @UpdateDocs()
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBlocoDto: UpdateBlocoDto,
   ): Promise<BlocoResponseDto> {
-    return this.blocoService.update(+id, updateBlocoDto);
+    return this.blocoService.update(id, updateBlocoDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RemoveDocs()
-  async remove(@Param('id') id: string): Promise<void> {
-    await this.blocoService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.blocoService.remove(id);
   }
 }
