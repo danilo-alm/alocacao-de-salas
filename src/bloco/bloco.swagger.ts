@@ -61,7 +61,7 @@ export function FindAllDocs() {
 export function FindOneDocs() {
   return applyDecorators(
     Get(':id'),
-    ApiOperation({ summary: 'Buscar um bloco específico' }),
+    ApiOperation({ summary: 'Buscar um bloco por id' }),
     ApiParam({
       name: 'id',
       description: 'ID do bloco',

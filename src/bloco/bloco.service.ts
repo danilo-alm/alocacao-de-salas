@@ -37,7 +37,7 @@ export class BlocoService {
 
   async findAll(): Promise<BlocoResponseDto[]> {
     const result = await this.prisma.bloco.findMany();
-    return DtoMapper.toDto(BlocoResponseDto, result);
+    return DtoMapper.toDtos(BlocoResponseDto, result);
   }
 
   async findOne(id: number): Promise<BlocoResponseWithSalasDto> {
@@ -63,7 +63,7 @@ export class BlocoService {
       },
     });
 
-    return DtoMapper.toDto(BlocoResponseDto, result);
+    return DtoMapper.toDtos(BlocoResponseDto, result);
   }
 
   async update(

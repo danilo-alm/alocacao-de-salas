@@ -20,7 +20,7 @@ export class TipoSalaService {
 
   async findAll(): Promise<TipoSalaResponseDto[]> {
     const result = await this.prisma.tipoSala.findMany();
-    return DtoMapper.toDto(TipoSalaResponseDto, result);
+    return DtoMapper.toDtos(TipoSalaResponseDto, result);
   }
 
   async findByNameContains(search: string): Promise<TipoSalaResponseDto[]> {
@@ -33,7 +33,7 @@ export class TipoSalaService {
       },
     });
 
-    return DtoMapper.toDto(TipoSalaResponseDto, result);
+    return DtoMapper.toDtos(TipoSalaResponseDto, result);
   }
 
   async findOne(id: number): Promise<TipoSalaWithSalasResponseDto> {
