@@ -7,7 +7,7 @@ import { EntityHasDependantsException } from 'src/common/exceptions/entity-has-d
 import { Bloco, Prisma, PrismaClient } from '../generated/prisma/client';
 import { CreateSalaDto } from './dto/create-sala.dto';
 import { SalaResponseDto } from './dto/sala-response.dto';
-import { SalaResponseWithAlocacoesDto } from './dto/sala-response-with-alocacoes.dto';
+import { SalaWithAlocacoesResponseDto } from './dto/sala-with-alocacoes-response.dto';
 import { UpdateSalaDto } from './dto/update-sala.dto';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class SalaService {
     return DtoMapper.toDtos(SalaResponseDto, result);
   }
 
-  async findOne(id: number): Promise<SalaResponseWithAlocacoesDto> {
+  async findOne(id: number): Promise<SalaWithAlocacoesResponseDto> {
     const result = await this.prisma.sala.findUnique({
       where: { Id: id },
       include: {
@@ -42,7 +42,7 @@ export class SalaService {
       throw new EntityDoesNotExistException('Sala não encontrada');
     }
 
-    return DtoMapper.toDto(SalaResponseWithAlocacoesDto, result);
+    return DtoMapper.toDto(SalaWithAlocacoesResponseDto, result);
   }
 
   async create(createSalaDto: CreateSalaDto): Promise<SalaResponseDto> {
@@ -77,7 +77,7 @@ export class SalaService {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new EntityExistsException('Já existe um bloco com este nome');
+        throw new EntityExistsException('Já existe uma sala com este código');
       }
       throw error;
     }
