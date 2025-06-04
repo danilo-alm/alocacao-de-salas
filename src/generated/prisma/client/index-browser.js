@@ -140,6 +140,11 @@ exports.Prisma.SalaScalarFieldEnum = {
   UpdatedAt: 'UpdatedAt'
 };
 
+exports.Prisma.DisciplinaScalarFieldEnum = {
+  Id: 'Id',
+  Nome: 'Nome'
+};
+
 exports.Prisma.AlocacaoScalarFieldEnum = {
   Id: 'Id',
   Data: 'Data',
@@ -147,6 +152,7 @@ exports.Prisma.AlocacaoScalarFieldEnum = {
   HoraInicio: 'HoraInicio',
   HoraFim: 'HoraFim',
   SalaId: 'SalaId',
+  DisciplinaId: 'DisciplinaId',
   CreatedAt: 'CreatedAt',
   UpdatedAt: 'UpdatedAt',
   DeletedAt: 'DeletedAt'
@@ -169,6 +175,10 @@ exports.Prisma.SalaOrderByRelevanceFieldEnum = {
   Codigo: 'Codigo'
 };
 
+exports.Prisma.DisciplinaOrderByRelevanceFieldEnum = {
+  Nome: 'Nome'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -184,6 +194,7 @@ exports.Prisma.ModelName = {
   TipoSala: 'TipoSala',
   Bloco: 'Bloco',
   Sala: 'Sala',
+  Disciplina: 'Disciplina',
   Alocacao: 'Alocacao'
 };
 

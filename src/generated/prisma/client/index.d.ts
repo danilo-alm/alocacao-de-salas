@@ -29,6 +29,11 @@ export type Bloco = $Result.DefaultSelection<Prisma.$BlocoPayload>
  */
 export type Sala = $Result.DefaultSelection<Prisma.$SalaPayload>
 /**
+ * Model Disciplina
+ * 
+ */
+export type Disciplina = $Result.DefaultSelection<Prisma.$DisciplinaPayload>
+/**
  * Model Alocacao
  * 
  */
@@ -188,6 +193,16 @@ export class PrismaClient<
     * ```
     */
   get sala(): Prisma.SalaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.disciplina`: Exposes CRUD operations for the **Disciplina** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Disciplinas
+    * const disciplinas = await prisma.disciplina.findMany()
+    * ```
+    */
+  get disciplina(): Prisma.DisciplinaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.alocacao`: Exposes CRUD operations for the **Alocacao** model.
@@ -641,6 +656,7 @@ export namespace Prisma {
     TipoSala: 'TipoSala',
     Bloco: 'Bloco',
     Sala: 'Sala',
+    Disciplina: 'Disciplina',
     Alocacao: 'Alocacao'
   };
 
@@ -660,7 +676,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "tipoSala" | "bloco" | "sala" | "alocacao"
+      modelProps: "tipoSala" | "bloco" | "sala" | "disciplina" | "alocacao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -862,6 +878,72 @@ export namespace Prisma {
           }
         }
       }
+      Disciplina: {
+        payload: Prisma.$DisciplinaPayload<ExtArgs>
+        fields: Prisma.DisciplinaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DisciplinaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DisciplinaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          findFirst: {
+            args: Prisma.DisciplinaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DisciplinaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          findMany: {
+            args: Prisma.DisciplinaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>[]
+          }
+          create: {
+            args: Prisma.DisciplinaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          createMany: {
+            args: Prisma.DisciplinaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.DisciplinaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          update: {
+            args: Prisma.DisciplinaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          deleteMany: {
+            args: Prisma.DisciplinaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DisciplinaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DisciplinaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DisciplinaPayload>
+          }
+          aggregate: {
+            args: Prisma.DisciplinaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDisciplina>
+          }
+          groupBy: {
+            args: Prisma.DisciplinaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DisciplinaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DisciplinaCountArgs<ExtArgs>
+            result: $Utils.Optional<DisciplinaCountAggregateOutputType> | number
+          }
+        }
+      }
       Alocacao: {
         payload: Prisma.$AlocacaoPayload<ExtArgs>
         fields: Prisma.AlocacaoFieldRefs
@@ -1015,6 +1097,7 @@ export namespace Prisma {
     tipoSala?: TipoSalaOmit
     bloco?: BlocoOmit
     sala?: SalaOmit
+    disciplina?: DisciplinaOmit
     alocacao?: AlocacaoOmit
   }
 
@@ -1194,6 +1277,37 @@ export namespace Prisma {
    * SalaCountOutputType without action
    */
   export type SalaCountOutputTypeCountAlocacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AlocacaoWhereInput
+  }
+
+
+  /**
+   * Count Type DisciplinaCountOutputType
+   */
+
+  export type DisciplinaCountOutputType = {
+    Alocacoes: number
+  }
+
+  export type DisciplinaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Alocacoes?: boolean | DisciplinaCountOutputTypeCountAlocacoesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DisciplinaCountOutputType without action
+   */
+  export type DisciplinaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DisciplinaCountOutputType
+     */
+    select?: DisciplinaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DisciplinaCountOutputType without action
+   */
+  export type DisciplinaCountOutputTypeCountAlocacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AlocacaoWhereInput
   }
 
@@ -4146,6 +4260,962 @@ export namespace Prisma {
 
 
   /**
+   * Model Disciplina
+   */
+
+  export type AggregateDisciplina = {
+    _count: DisciplinaCountAggregateOutputType | null
+    _avg: DisciplinaAvgAggregateOutputType | null
+    _sum: DisciplinaSumAggregateOutputType | null
+    _min: DisciplinaMinAggregateOutputType | null
+    _max: DisciplinaMaxAggregateOutputType | null
+  }
+
+  export type DisciplinaAvgAggregateOutputType = {
+    Id: number | null
+  }
+
+  export type DisciplinaSumAggregateOutputType = {
+    Id: number | null
+  }
+
+  export type DisciplinaMinAggregateOutputType = {
+    Id: number | null
+    Nome: string | null
+  }
+
+  export type DisciplinaMaxAggregateOutputType = {
+    Id: number | null
+    Nome: string | null
+  }
+
+  export type DisciplinaCountAggregateOutputType = {
+    Id: number
+    Nome: number
+    _all: number
+  }
+
+
+  export type DisciplinaAvgAggregateInputType = {
+    Id?: true
+  }
+
+  export type DisciplinaSumAggregateInputType = {
+    Id?: true
+  }
+
+  export type DisciplinaMinAggregateInputType = {
+    Id?: true
+    Nome?: true
+  }
+
+  export type DisciplinaMaxAggregateInputType = {
+    Id?: true
+    Nome?: true
+  }
+
+  export type DisciplinaCountAggregateInputType = {
+    Id?: true
+    Nome?: true
+    _all?: true
+  }
+
+  export type DisciplinaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Disciplina to aggregate.
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Disciplinas to fetch.
+     */
+    orderBy?: DisciplinaOrderByWithRelationInput | DisciplinaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DisciplinaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Disciplinas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Disciplinas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Disciplinas
+    **/
+    _count?: true | DisciplinaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DisciplinaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DisciplinaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DisciplinaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DisciplinaMaxAggregateInputType
+  }
+
+  export type GetDisciplinaAggregateType<T extends DisciplinaAggregateArgs> = {
+        [P in keyof T & keyof AggregateDisciplina]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDisciplina[P]>
+      : GetScalarType<T[P], AggregateDisciplina[P]>
+  }
+
+
+
+
+  export type DisciplinaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DisciplinaWhereInput
+    orderBy?: DisciplinaOrderByWithAggregationInput | DisciplinaOrderByWithAggregationInput[]
+    by: DisciplinaScalarFieldEnum[] | DisciplinaScalarFieldEnum
+    having?: DisciplinaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DisciplinaCountAggregateInputType | true
+    _avg?: DisciplinaAvgAggregateInputType
+    _sum?: DisciplinaSumAggregateInputType
+    _min?: DisciplinaMinAggregateInputType
+    _max?: DisciplinaMaxAggregateInputType
+  }
+
+  export type DisciplinaGroupByOutputType = {
+    Id: number
+    Nome: string
+    _count: DisciplinaCountAggregateOutputType | null
+    _avg: DisciplinaAvgAggregateOutputType | null
+    _sum: DisciplinaSumAggregateOutputType | null
+    _min: DisciplinaMinAggregateOutputType | null
+    _max: DisciplinaMaxAggregateOutputType | null
+  }
+
+  type GetDisciplinaGroupByPayload<T extends DisciplinaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DisciplinaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DisciplinaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DisciplinaGroupByOutputType[P]>
+            : GetScalarType<T[P], DisciplinaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DisciplinaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    Id?: boolean
+    Nome?: boolean
+    Alocacoes?: boolean | Disciplina$AlocacoesArgs<ExtArgs>
+    _count?: boolean | DisciplinaCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["disciplina"]>
+
+
+
+  export type DisciplinaSelectScalar = {
+    Id?: boolean
+    Nome?: boolean
+  }
+
+  export type DisciplinaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Nome", ExtArgs["result"]["disciplina"]>
+  export type DisciplinaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Alocacoes?: boolean | Disciplina$AlocacoesArgs<ExtArgs>
+    _count?: boolean | DisciplinaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $DisciplinaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Disciplina"
+    objects: {
+      Alocacoes: Prisma.$AlocacaoPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      Id: number
+      Nome: string
+    }, ExtArgs["result"]["disciplina"]>
+    composites: {}
+  }
+
+  type DisciplinaGetPayload<S extends boolean | null | undefined | DisciplinaDefaultArgs> = $Result.GetResult<Prisma.$DisciplinaPayload, S>
+
+  type DisciplinaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DisciplinaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DisciplinaCountAggregateInputType | true
+    }
+
+  export interface DisciplinaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Disciplina'], meta: { name: 'Disciplina' } }
+    /**
+     * Find zero or one Disciplina that matches the filter.
+     * @param {DisciplinaFindUniqueArgs} args - Arguments to find a Disciplina
+     * @example
+     * // Get one Disciplina
+     * const disciplina = await prisma.disciplina.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DisciplinaFindUniqueArgs>(args: SelectSubset<T, DisciplinaFindUniqueArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Disciplina that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DisciplinaFindUniqueOrThrowArgs} args - Arguments to find a Disciplina
+     * @example
+     * // Get one Disciplina
+     * const disciplina = await prisma.disciplina.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DisciplinaFindUniqueOrThrowArgs>(args: SelectSubset<T, DisciplinaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Disciplina that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaFindFirstArgs} args - Arguments to find a Disciplina
+     * @example
+     * // Get one Disciplina
+     * const disciplina = await prisma.disciplina.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DisciplinaFindFirstArgs>(args?: SelectSubset<T, DisciplinaFindFirstArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Disciplina that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaFindFirstOrThrowArgs} args - Arguments to find a Disciplina
+     * @example
+     * // Get one Disciplina
+     * const disciplina = await prisma.disciplina.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DisciplinaFindFirstOrThrowArgs>(args?: SelectSubset<T, DisciplinaFindFirstOrThrowArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Disciplinas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Disciplinas
+     * const disciplinas = await prisma.disciplina.findMany()
+     * 
+     * // Get first 10 Disciplinas
+     * const disciplinas = await prisma.disciplina.findMany({ take: 10 })
+     * 
+     * // Only select the `Id`
+     * const disciplinaWithIdOnly = await prisma.disciplina.findMany({ select: { Id: true } })
+     * 
+     */
+    findMany<T extends DisciplinaFindManyArgs>(args?: SelectSubset<T, DisciplinaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Disciplina.
+     * @param {DisciplinaCreateArgs} args - Arguments to create a Disciplina.
+     * @example
+     * // Create one Disciplina
+     * const Disciplina = await prisma.disciplina.create({
+     *   data: {
+     *     // ... data to create a Disciplina
+     *   }
+     * })
+     * 
+     */
+    create<T extends DisciplinaCreateArgs>(args: SelectSubset<T, DisciplinaCreateArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Disciplinas.
+     * @param {DisciplinaCreateManyArgs} args - Arguments to create many Disciplinas.
+     * @example
+     * // Create many Disciplinas
+     * const disciplina = await prisma.disciplina.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DisciplinaCreateManyArgs>(args?: SelectSubset<T, DisciplinaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Disciplina.
+     * @param {DisciplinaDeleteArgs} args - Arguments to delete one Disciplina.
+     * @example
+     * // Delete one Disciplina
+     * const Disciplina = await prisma.disciplina.delete({
+     *   where: {
+     *     // ... filter to delete one Disciplina
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DisciplinaDeleteArgs>(args: SelectSubset<T, DisciplinaDeleteArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Disciplina.
+     * @param {DisciplinaUpdateArgs} args - Arguments to update one Disciplina.
+     * @example
+     * // Update one Disciplina
+     * const disciplina = await prisma.disciplina.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DisciplinaUpdateArgs>(args: SelectSubset<T, DisciplinaUpdateArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Disciplinas.
+     * @param {DisciplinaDeleteManyArgs} args - Arguments to filter Disciplinas to delete.
+     * @example
+     * // Delete a few Disciplinas
+     * const { count } = await prisma.disciplina.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DisciplinaDeleteManyArgs>(args?: SelectSubset<T, DisciplinaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Disciplinas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Disciplinas
+     * const disciplina = await prisma.disciplina.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DisciplinaUpdateManyArgs>(args: SelectSubset<T, DisciplinaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Disciplina.
+     * @param {DisciplinaUpsertArgs} args - Arguments to update or create a Disciplina.
+     * @example
+     * // Update or create a Disciplina
+     * const disciplina = await prisma.disciplina.upsert({
+     *   create: {
+     *     // ... data to create a Disciplina
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Disciplina we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DisciplinaUpsertArgs>(args: SelectSubset<T, DisciplinaUpsertArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Disciplinas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaCountArgs} args - Arguments to filter Disciplinas to count.
+     * @example
+     * // Count the number of Disciplinas
+     * const count = await prisma.disciplina.count({
+     *   where: {
+     *     // ... the filter for the Disciplinas we want to count
+     *   }
+     * })
+    **/
+    count<T extends DisciplinaCountArgs>(
+      args?: Subset<T, DisciplinaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DisciplinaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Disciplina.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DisciplinaAggregateArgs>(args: Subset<T, DisciplinaAggregateArgs>): Prisma.PrismaPromise<GetDisciplinaAggregateType<T>>
+
+    /**
+     * Group by Disciplina.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DisciplinaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DisciplinaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DisciplinaGroupByArgs['orderBy'] }
+        : { orderBy?: DisciplinaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DisciplinaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDisciplinaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Disciplina model
+   */
+  readonly fields: DisciplinaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Disciplina.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DisciplinaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Alocacoes<T extends Disciplina$AlocacoesArgs<ExtArgs> = {}>(args?: Subset<T, Disciplina$AlocacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlocacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Disciplina model
+   */
+  interface DisciplinaFieldRefs {
+    readonly Id: FieldRef<"Disciplina", 'Int'>
+    readonly Nome: FieldRef<"Disciplina", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Disciplina findUnique
+   */
+  export type DisciplinaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter, which Disciplina to fetch.
+     */
+    where: DisciplinaWhereUniqueInput
+  }
+
+  /**
+   * Disciplina findUniqueOrThrow
+   */
+  export type DisciplinaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter, which Disciplina to fetch.
+     */
+    where: DisciplinaWhereUniqueInput
+  }
+
+  /**
+   * Disciplina findFirst
+   */
+  export type DisciplinaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter, which Disciplina to fetch.
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Disciplinas to fetch.
+     */
+    orderBy?: DisciplinaOrderByWithRelationInput | DisciplinaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Disciplinas.
+     */
+    cursor?: DisciplinaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Disciplinas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Disciplinas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Disciplinas.
+     */
+    distinct?: DisciplinaScalarFieldEnum | DisciplinaScalarFieldEnum[]
+  }
+
+  /**
+   * Disciplina findFirstOrThrow
+   */
+  export type DisciplinaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter, which Disciplina to fetch.
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Disciplinas to fetch.
+     */
+    orderBy?: DisciplinaOrderByWithRelationInput | DisciplinaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Disciplinas.
+     */
+    cursor?: DisciplinaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Disciplinas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Disciplinas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Disciplinas.
+     */
+    distinct?: DisciplinaScalarFieldEnum | DisciplinaScalarFieldEnum[]
+  }
+
+  /**
+   * Disciplina findMany
+   */
+  export type DisciplinaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter, which Disciplinas to fetch.
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Disciplinas to fetch.
+     */
+    orderBy?: DisciplinaOrderByWithRelationInput | DisciplinaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Disciplinas.
+     */
+    cursor?: DisciplinaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Disciplinas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Disciplinas.
+     */
+    skip?: number
+    distinct?: DisciplinaScalarFieldEnum | DisciplinaScalarFieldEnum[]
+  }
+
+  /**
+   * Disciplina create
+   */
+  export type DisciplinaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Disciplina.
+     */
+    data: XOR<DisciplinaCreateInput, DisciplinaUncheckedCreateInput>
+  }
+
+  /**
+   * Disciplina createMany
+   */
+  export type DisciplinaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Disciplinas.
+     */
+    data: DisciplinaCreateManyInput | DisciplinaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Disciplina update
+   */
+  export type DisciplinaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Disciplina.
+     */
+    data: XOR<DisciplinaUpdateInput, DisciplinaUncheckedUpdateInput>
+    /**
+     * Choose, which Disciplina to update.
+     */
+    where: DisciplinaWhereUniqueInput
+  }
+
+  /**
+   * Disciplina updateMany
+   */
+  export type DisciplinaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Disciplinas.
+     */
+    data: XOR<DisciplinaUpdateManyMutationInput, DisciplinaUncheckedUpdateManyInput>
+    /**
+     * Filter which Disciplinas to update
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * Limit how many Disciplinas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Disciplina upsert
+   */
+  export type DisciplinaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Disciplina to update in case it exists.
+     */
+    where: DisciplinaWhereUniqueInput
+    /**
+     * In case the Disciplina found by the `where` argument doesn't exist, create a new Disciplina with this data.
+     */
+    create: XOR<DisciplinaCreateInput, DisciplinaUncheckedCreateInput>
+    /**
+     * In case the Disciplina was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DisciplinaUpdateInput, DisciplinaUncheckedUpdateInput>
+  }
+
+  /**
+   * Disciplina delete
+   */
+  export type DisciplinaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+    /**
+     * Filter which Disciplina to delete.
+     */
+    where: DisciplinaWhereUniqueInput
+  }
+
+  /**
+   * Disciplina deleteMany
+   */
+  export type DisciplinaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Disciplinas to delete
+     */
+    where?: DisciplinaWhereInput
+    /**
+     * Limit how many Disciplinas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Disciplina.Alocacoes
+   */
+  export type Disciplina$AlocacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Alocacao
+     */
+    select?: AlocacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Alocacao
+     */
+    omit?: AlocacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AlocacaoInclude<ExtArgs> | null
+    where?: AlocacaoWhereInput
+    orderBy?: AlocacaoOrderByWithRelationInput | AlocacaoOrderByWithRelationInput[]
+    cursor?: AlocacaoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AlocacaoScalarFieldEnum | AlocacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Disciplina without action
+   */
+  export type DisciplinaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Disciplina
+     */
+    select?: DisciplinaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Disciplina
+     */
+    omit?: DisciplinaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DisciplinaInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Alocacao
    */
 
@@ -4161,12 +5231,14 @@ export namespace Prisma {
     Id: number | null
     DiaDaSemana: number | null
     SalaId: number | null
+    DisciplinaId: number | null
   }
 
   export type AlocacaoSumAggregateOutputType = {
     Id: number | null
     DiaDaSemana: number | null
     SalaId: number | null
+    DisciplinaId: number | null
   }
 
   export type AlocacaoMinAggregateOutputType = {
@@ -4176,6 +5248,7 @@ export namespace Prisma {
     HoraInicio: string | null
     HoraFim: string | null
     SalaId: number | null
+    DisciplinaId: number | null
     CreatedAt: Date | null
     UpdatedAt: Date | null
     DeletedAt: Date | null
@@ -4188,6 +5261,7 @@ export namespace Prisma {
     HoraInicio: string | null
     HoraFim: string | null
     SalaId: number | null
+    DisciplinaId: number | null
     CreatedAt: Date | null
     UpdatedAt: Date | null
     DeletedAt: Date | null
@@ -4200,6 +5274,7 @@ export namespace Prisma {
     HoraInicio: number
     HoraFim: number
     SalaId: number
+    DisciplinaId: number
     CreatedAt: number
     UpdatedAt: number
     DeletedAt: number
@@ -4211,12 +5286,14 @@ export namespace Prisma {
     Id?: true
     DiaDaSemana?: true
     SalaId?: true
+    DisciplinaId?: true
   }
 
   export type AlocacaoSumAggregateInputType = {
     Id?: true
     DiaDaSemana?: true
     SalaId?: true
+    DisciplinaId?: true
   }
 
   export type AlocacaoMinAggregateInputType = {
@@ -4226,6 +5303,7 @@ export namespace Prisma {
     HoraInicio?: true
     HoraFim?: true
     SalaId?: true
+    DisciplinaId?: true
     CreatedAt?: true
     UpdatedAt?: true
     DeletedAt?: true
@@ -4238,6 +5316,7 @@ export namespace Prisma {
     HoraInicio?: true
     HoraFim?: true
     SalaId?: true
+    DisciplinaId?: true
     CreatedAt?: true
     UpdatedAt?: true
     DeletedAt?: true
@@ -4250,6 +5329,7 @@ export namespace Prisma {
     HoraInicio?: true
     HoraFim?: true
     SalaId?: true
+    DisciplinaId?: true
     CreatedAt?: true
     UpdatedAt?: true
     DeletedAt?: true
@@ -4349,6 +5429,7 @@ export namespace Prisma {
     HoraInicio: string
     HoraFim: string
     SalaId: number
+    DisciplinaId: number
     CreatedAt: Date
     UpdatedAt: Date
     DeletedAt: Date | null
@@ -4380,10 +5461,12 @@ export namespace Prisma {
     HoraInicio?: boolean
     HoraFim?: boolean
     SalaId?: boolean
+    DisciplinaId?: boolean
     CreatedAt?: boolean
     UpdatedAt?: boolean
     DeletedAt?: boolean
     Sala?: boolean | SalaDefaultArgs<ExtArgs>
+    Disciplina?: boolean | DisciplinaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["alocacao"]>
 
 
@@ -4395,20 +5478,23 @@ export namespace Prisma {
     HoraInicio?: boolean
     HoraFim?: boolean
     SalaId?: boolean
+    DisciplinaId?: boolean
     CreatedAt?: boolean
     UpdatedAt?: boolean
     DeletedAt?: boolean
   }
 
-  export type AlocacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Data" | "DiaDaSemana" | "HoraInicio" | "HoraFim" | "SalaId" | "CreatedAt" | "UpdatedAt" | "DeletedAt", ExtArgs["result"]["alocacao"]>
+  export type AlocacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Data" | "DiaDaSemana" | "HoraInicio" | "HoraFim" | "SalaId" | "DisciplinaId" | "CreatedAt" | "UpdatedAt" | "DeletedAt", ExtArgs["result"]["alocacao"]>
   export type AlocacaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Sala?: boolean | SalaDefaultArgs<ExtArgs>
+    Disciplina?: boolean | DisciplinaDefaultArgs<ExtArgs>
   }
 
   export type $AlocacaoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Alocacao"
     objects: {
       Sala: Prisma.$SalaPayload<ExtArgs>
+      Disciplina: Prisma.$DisciplinaPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: number
@@ -4417,6 +5503,7 @@ export namespace Prisma {
       HoraInicio: string
       HoraFim: string
       SalaId: number
+      DisciplinaId: number
       CreatedAt: Date
       UpdatedAt: Date
       DeletedAt: Date | null
@@ -4761,6 +5848,7 @@ export namespace Prisma {
   export interface Prisma__AlocacaoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Sala<T extends SalaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SalaDefaultArgs<ExtArgs>>): Prisma__SalaClient<$Result.GetResult<Prisma.$SalaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    Disciplina<T extends DisciplinaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DisciplinaDefaultArgs<ExtArgs>>): Prisma__DisciplinaClient<$Result.GetResult<Prisma.$DisciplinaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4796,6 +5884,7 @@ export namespace Prisma {
     readonly HoraInicio: FieldRef<"Alocacao", 'String'>
     readonly HoraFim: FieldRef<"Alocacao", 'String'>
     readonly SalaId: FieldRef<"Alocacao", 'Int'>
+    readonly DisciplinaId: FieldRef<"Alocacao", 'Int'>
     readonly CreatedAt: FieldRef<"Alocacao", 'DateTime'>
     readonly UpdatedAt: FieldRef<"Alocacao", 'DateTime'>
     readonly DeletedAt: FieldRef<"Alocacao", 'DateTime'>
@@ -5203,6 +6292,14 @@ export namespace Prisma {
   export type SalaScalarFieldEnum = (typeof SalaScalarFieldEnum)[keyof typeof SalaScalarFieldEnum]
 
 
+  export const DisciplinaScalarFieldEnum: {
+    Id: 'Id',
+    Nome: 'Nome'
+  };
+
+  export type DisciplinaScalarFieldEnum = (typeof DisciplinaScalarFieldEnum)[keyof typeof DisciplinaScalarFieldEnum]
+
+
   export const AlocacaoScalarFieldEnum: {
     Id: 'Id',
     Data: 'Data',
@@ -5210,6 +6307,7 @@ export namespace Prisma {
     HoraInicio: 'HoraInicio',
     HoraFim: 'HoraFim',
     SalaId: 'SalaId',
+    DisciplinaId: 'DisciplinaId',
     CreatedAt: 'CreatedAt',
     UpdatedAt: 'UpdatedAt',
     DeletedAt: 'DeletedAt'
@@ -5245,6 +6343,13 @@ export namespace Prisma {
   };
 
   export type SalaOrderByRelevanceFieldEnum = (typeof SalaOrderByRelevanceFieldEnum)[keyof typeof SalaOrderByRelevanceFieldEnum]
+
+
+  export const DisciplinaOrderByRelevanceFieldEnum: {
+    Nome: 'Nome'
+  };
+
+  export type DisciplinaOrderByRelevanceFieldEnum = (typeof DisciplinaOrderByRelevanceFieldEnum)[keyof typeof DisciplinaOrderByRelevanceFieldEnum]
 
 
   export const NullsOrder: {
@@ -5459,6 +6564,49 @@ export namespace Prisma {
     UpdatedAt?: DateTimeWithAggregatesFilter<"Sala"> | Date | string
   }
 
+  export type DisciplinaWhereInput = {
+    AND?: DisciplinaWhereInput | DisciplinaWhereInput[]
+    OR?: DisciplinaWhereInput[]
+    NOT?: DisciplinaWhereInput | DisciplinaWhereInput[]
+    Id?: IntFilter<"Disciplina"> | number
+    Nome?: StringFilter<"Disciplina"> | string
+    Alocacoes?: AlocacaoListRelationFilter
+  }
+
+  export type DisciplinaOrderByWithRelationInput = {
+    Id?: SortOrder
+    Nome?: SortOrder
+    Alocacoes?: AlocacaoOrderByRelationAggregateInput
+    _relevance?: DisciplinaOrderByRelevanceInput
+  }
+
+  export type DisciplinaWhereUniqueInput = Prisma.AtLeast<{
+    Id?: number
+    Nome?: string
+    AND?: DisciplinaWhereInput | DisciplinaWhereInput[]
+    OR?: DisciplinaWhereInput[]
+    NOT?: DisciplinaWhereInput | DisciplinaWhereInput[]
+    Alocacoes?: AlocacaoListRelationFilter
+  }, "Id" | "Nome">
+
+  export type DisciplinaOrderByWithAggregationInput = {
+    Id?: SortOrder
+    Nome?: SortOrder
+    _count?: DisciplinaCountOrderByAggregateInput
+    _avg?: DisciplinaAvgOrderByAggregateInput
+    _max?: DisciplinaMaxOrderByAggregateInput
+    _min?: DisciplinaMinOrderByAggregateInput
+    _sum?: DisciplinaSumOrderByAggregateInput
+  }
+
+  export type DisciplinaScalarWhereWithAggregatesInput = {
+    AND?: DisciplinaScalarWhereWithAggregatesInput | DisciplinaScalarWhereWithAggregatesInput[]
+    OR?: DisciplinaScalarWhereWithAggregatesInput[]
+    NOT?: DisciplinaScalarWhereWithAggregatesInput | DisciplinaScalarWhereWithAggregatesInput[]
+    Id?: IntWithAggregatesFilter<"Disciplina"> | number
+    Nome?: StringWithAggregatesFilter<"Disciplina"> | string
+  }
+
   export type AlocacaoWhereInput = {
     AND?: AlocacaoWhereInput | AlocacaoWhereInput[]
     OR?: AlocacaoWhereInput[]
@@ -5469,10 +6617,12 @@ export namespace Prisma {
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
+    DisciplinaId?: IntFilter<"Alocacao"> | number
     CreatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     UpdatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     DeletedAt?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
     Sala?: XOR<SalaScalarRelationFilter, SalaWhereInput>
+    Disciplina?: XOR<DisciplinaScalarRelationFilter, DisciplinaWhereInput>
   }
 
   export type AlocacaoOrderByWithRelationInput = {
@@ -5482,10 +6632,12 @@ export namespace Prisma {
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
     CreatedAt?: SortOrder
     UpdatedAt?: SortOrder
     DeletedAt?: SortOrderInput | SortOrder
     Sala?: SalaOrderByWithRelationInput
+    Disciplina?: DisciplinaOrderByWithRelationInput
     _relevance?: AlocacaoOrderByRelevanceInput
   }
 
@@ -5500,10 +6652,12 @@ export namespace Prisma {
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
+    DisciplinaId?: IntFilter<"Alocacao"> | number
     CreatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     UpdatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     DeletedAt?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
     Sala?: XOR<SalaScalarRelationFilter, SalaWhereInput>
+    Disciplina?: XOR<DisciplinaScalarRelationFilter, DisciplinaWhereInput>
   }, "Id" | "SalaId_Data_HoraInicio_HoraFim">
 
   export type AlocacaoOrderByWithAggregationInput = {
@@ -5513,6 +6667,7 @@ export namespace Prisma {
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
     CreatedAt?: SortOrder
     UpdatedAt?: SortOrder
     DeletedAt?: SortOrderInput | SortOrder
@@ -5533,6 +6688,7 @@ export namespace Prisma {
     HoraInicio?: StringWithAggregatesFilter<"Alocacao"> | string
     HoraFim?: StringWithAggregatesFilter<"Alocacao"> | string
     SalaId?: IntWithAggregatesFilter<"Alocacao"> | number
+    DisciplinaId?: IntWithAggregatesFilter<"Alocacao"> | number
     CreatedAt?: DateTimeWithAggregatesFilter<"Alocacao"> | Date | string
     UpdatedAt?: DateTimeWithAggregatesFilter<"Alocacao"> | Date | string
     DeletedAt?: DateTimeNullableWithAggregatesFilter<"Alocacao"> | Date | string | null
@@ -5679,6 +6835,42 @@ export namespace Prisma {
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DisciplinaCreateInput = {
+    Nome: string
+    Alocacoes?: AlocacaoCreateNestedManyWithoutDisciplinaInput
+  }
+
+  export type DisciplinaUncheckedCreateInput = {
+    Id?: number
+    Nome: string
+    Alocacoes?: AlocacaoUncheckedCreateNestedManyWithoutDisciplinaInput
+  }
+
+  export type DisciplinaUpdateInput = {
+    Nome?: StringFieldUpdateOperationsInput | string
+    Alocacoes?: AlocacaoUpdateManyWithoutDisciplinaNestedInput
+  }
+
+  export type DisciplinaUncheckedUpdateInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Nome?: StringFieldUpdateOperationsInput | string
+    Alocacoes?: AlocacaoUncheckedUpdateManyWithoutDisciplinaNestedInput
+  }
+
+  export type DisciplinaCreateManyInput = {
+    Id?: number
+    Nome: string
+  }
+
+  export type DisciplinaUpdateManyMutationInput = {
+    Nome?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DisciplinaUncheckedUpdateManyInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Nome?: StringFieldUpdateOperationsInput | string
+  }
+
   export type AlocacaoCreateInput = {
     Data?: Date | string | null
     DiaDaSemana?: number | null
@@ -5688,6 +6880,7 @@ export namespace Prisma {
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
     Sala: SalaCreateNestedOneWithoutAlocacoesInput
+    Disciplina: DisciplinaCreateNestedOneWithoutAlocacoesInput
   }
 
   export type AlocacaoUncheckedCreateInput = {
@@ -5697,6 +6890,7 @@ export namespace Prisma {
     HoraInicio: string
     HoraFim: string
     SalaId: number
+    DisciplinaId: number
     CreatedAt?: Date | string
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
@@ -5711,6 +6905,7 @@ export namespace Prisma {
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Sala?: SalaUpdateOneRequiredWithoutAlocacoesNestedInput
+    Disciplina?: DisciplinaUpdateOneRequiredWithoutAlocacoesNestedInput
   }
 
   export type AlocacaoUncheckedUpdateInput = {
@@ -5720,6 +6915,7 @@ export namespace Prisma {
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number
+    DisciplinaId?: IntFieldUpdateOperationsInput | number
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5732,6 +6928,7 @@ export namespace Prisma {
     HoraInicio: string
     HoraFim: string
     SalaId: number
+    DisciplinaId: number
     CreatedAt?: Date | string
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
@@ -5754,6 +6951,7 @@ export namespace Prisma {
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number
+    DisciplinaId?: IntFieldUpdateOperationsInput | number
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5982,6 +7180,35 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type DisciplinaOrderByRelevanceInput = {
+    fields: DisciplinaOrderByRelevanceFieldEnum | DisciplinaOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type DisciplinaCountOrderByAggregateInput = {
+    Id?: SortOrder
+    Nome?: SortOrder
+  }
+
+  export type DisciplinaAvgOrderByAggregateInput = {
+    Id?: SortOrder
+  }
+
+  export type DisciplinaMaxOrderByAggregateInput = {
+    Id?: SortOrder
+    Nome?: SortOrder
+  }
+
+  export type DisciplinaMinOrderByAggregateInput = {
+    Id?: SortOrder
+    Nome?: SortOrder
+  }
+
+  export type DisciplinaSumOrderByAggregateInput = {
+    Id?: SortOrder
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -6009,6 +7236,11 @@ export namespace Prisma {
     isNot?: SalaWhereInput
   }
 
+  export type DisciplinaScalarRelationFilter = {
+    is?: DisciplinaWhereInput
+    isNot?: DisciplinaWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -6034,6 +7266,7 @@ export namespace Prisma {
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
     CreatedAt?: SortOrder
     UpdatedAt?: SortOrder
     DeletedAt?: SortOrder
@@ -6043,6 +7276,7 @@ export namespace Prisma {
     Id?: SortOrder
     DiaDaSemana?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
   }
 
   export type AlocacaoMaxOrderByAggregateInput = {
@@ -6052,6 +7286,7 @@ export namespace Prisma {
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
     CreatedAt?: SortOrder
     UpdatedAt?: SortOrder
     DeletedAt?: SortOrder
@@ -6064,6 +7299,7 @@ export namespace Prisma {
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
     CreatedAt?: SortOrder
     UpdatedAt?: SortOrder
     DeletedAt?: SortOrder
@@ -6073,6 +7309,7 @@ export namespace Prisma {
     Id?: SortOrder
     DiaDaSemana?: SortOrder
     SalaId?: SortOrder
+    DisciplinaId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -6275,10 +7512,58 @@ export namespace Prisma {
     deleteMany?: AlocacaoScalarWhereInput | AlocacaoScalarWhereInput[]
   }
 
+  export type AlocacaoCreateNestedManyWithoutDisciplinaInput = {
+    create?: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput> | AlocacaoCreateWithoutDisciplinaInput[] | AlocacaoUncheckedCreateWithoutDisciplinaInput[]
+    connectOrCreate?: AlocacaoCreateOrConnectWithoutDisciplinaInput | AlocacaoCreateOrConnectWithoutDisciplinaInput[]
+    createMany?: AlocacaoCreateManyDisciplinaInputEnvelope
+    connect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+  }
+
+  export type AlocacaoUncheckedCreateNestedManyWithoutDisciplinaInput = {
+    create?: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput> | AlocacaoCreateWithoutDisciplinaInput[] | AlocacaoUncheckedCreateWithoutDisciplinaInput[]
+    connectOrCreate?: AlocacaoCreateOrConnectWithoutDisciplinaInput | AlocacaoCreateOrConnectWithoutDisciplinaInput[]
+    createMany?: AlocacaoCreateManyDisciplinaInputEnvelope
+    connect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+  }
+
+  export type AlocacaoUpdateManyWithoutDisciplinaNestedInput = {
+    create?: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput> | AlocacaoCreateWithoutDisciplinaInput[] | AlocacaoUncheckedCreateWithoutDisciplinaInput[]
+    connectOrCreate?: AlocacaoCreateOrConnectWithoutDisciplinaInput | AlocacaoCreateOrConnectWithoutDisciplinaInput[]
+    upsert?: AlocacaoUpsertWithWhereUniqueWithoutDisciplinaInput | AlocacaoUpsertWithWhereUniqueWithoutDisciplinaInput[]
+    createMany?: AlocacaoCreateManyDisciplinaInputEnvelope
+    set?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    disconnect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    delete?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    connect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    update?: AlocacaoUpdateWithWhereUniqueWithoutDisciplinaInput | AlocacaoUpdateWithWhereUniqueWithoutDisciplinaInput[]
+    updateMany?: AlocacaoUpdateManyWithWhereWithoutDisciplinaInput | AlocacaoUpdateManyWithWhereWithoutDisciplinaInput[]
+    deleteMany?: AlocacaoScalarWhereInput | AlocacaoScalarWhereInput[]
+  }
+
+  export type AlocacaoUncheckedUpdateManyWithoutDisciplinaNestedInput = {
+    create?: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput> | AlocacaoCreateWithoutDisciplinaInput[] | AlocacaoUncheckedCreateWithoutDisciplinaInput[]
+    connectOrCreate?: AlocacaoCreateOrConnectWithoutDisciplinaInput | AlocacaoCreateOrConnectWithoutDisciplinaInput[]
+    upsert?: AlocacaoUpsertWithWhereUniqueWithoutDisciplinaInput | AlocacaoUpsertWithWhereUniqueWithoutDisciplinaInput[]
+    createMany?: AlocacaoCreateManyDisciplinaInputEnvelope
+    set?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    disconnect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    delete?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    connect?: AlocacaoWhereUniqueInput | AlocacaoWhereUniqueInput[]
+    update?: AlocacaoUpdateWithWhereUniqueWithoutDisciplinaInput | AlocacaoUpdateWithWhereUniqueWithoutDisciplinaInput[]
+    updateMany?: AlocacaoUpdateManyWithWhereWithoutDisciplinaInput | AlocacaoUpdateManyWithWhereWithoutDisciplinaInput[]
+    deleteMany?: AlocacaoScalarWhereInput | AlocacaoScalarWhereInput[]
+  }
+
   export type SalaCreateNestedOneWithoutAlocacoesInput = {
     create?: XOR<SalaCreateWithoutAlocacoesInput, SalaUncheckedCreateWithoutAlocacoesInput>
     connectOrCreate?: SalaCreateOrConnectWithoutAlocacoesInput
     connect?: SalaWhereUniqueInput
+  }
+
+  export type DisciplinaCreateNestedOneWithoutAlocacoesInput = {
+    create?: XOR<DisciplinaCreateWithoutAlocacoesInput, DisciplinaUncheckedCreateWithoutAlocacoesInput>
+    connectOrCreate?: DisciplinaCreateOrConnectWithoutAlocacoesInput
+    connect?: DisciplinaWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -6299,6 +7584,14 @@ export namespace Prisma {
     upsert?: SalaUpsertWithoutAlocacoesInput
     connect?: SalaWhereUniqueInput
     update?: XOR<XOR<SalaUpdateToOneWithWhereWithoutAlocacoesInput, SalaUpdateWithoutAlocacoesInput>, SalaUncheckedUpdateWithoutAlocacoesInput>
+  }
+
+  export type DisciplinaUpdateOneRequiredWithoutAlocacoesNestedInput = {
+    create?: XOR<DisciplinaCreateWithoutAlocacoesInput, DisciplinaUncheckedCreateWithoutAlocacoesInput>
+    connectOrCreate?: DisciplinaCreateOrConnectWithoutAlocacoesInput
+    upsert?: DisciplinaUpsertWithoutAlocacoesInput
+    connect?: DisciplinaWhereUniqueInput
+    update?: XOR<XOR<DisciplinaUpdateToOneWithWhereWithoutAlocacoesInput, DisciplinaUpdateWithoutAlocacoesInput>, DisciplinaUncheckedUpdateWithoutAlocacoesInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -6599,6 +7892,7 @@ export namespace Prisma {
     CreatedAt?: Date | string
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
+    Disciplina: DisciplinaCreateNestedOneWithoutAlocacoesInput
   }
 
   export type AlocacaoUncheckedCreateWithoutSalaInput = {
@@ -6607,6 +7901,7 @@ export namespace Prisma {
     DiaDaSemana?: number | null
     HoraInicio: string
     HoraFim: string
+    DisciplinaId: number
     CreatedAt?: Date | string
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
@@ -6688,9 +7983,59 @@ export namespace Prisma {
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
+    DisciplinaId?: IntFilter<"Alocacao"> | number
     CreatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     UpdatedAt?: DateTimeFilter<"Alocacao"> | Date | string
     DeletedAt?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
+  }
+
+  export type AlocacaoCreateWithoutDisciplinaInput = {
+    Data?: Date | string | null
+    DiaDaSemana?: number | null
+    HoraInicio: string
+    HoraFim: string
+    CreatedAt?: Date | string
+    UpdatedAt?: Date | string
+    DeletedAt?: Date | string | null
+    Sala: SalaCreateNestedOneWithoutAlocacoesInput
+  }
+
+  export type AlocacaoUncheckedCreateWithoutDisciplinaInput = {
+    Id?: number
+    Data?: Date | string | null
+    DiaDaSemana?: number | null
+    HoraInicio: string
+    HoraFim: string
+    SalaId: number
+    CreatedAt?: Date | string
+    UpdatedAt?: Date | string
+    DeletedAt?: Date | string | null
+  }
+
+  export type AlocacaoCreateOrConnectWithoutDisciplinaInput = {
+    where: AlocacaoWhereUniqueInput
+    create: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput>
+  }
+
+  export type AlocacaoCreateManyDisciplinaInputEnvelope = {
+    data: AlocacaoCreateManyDisciplinaInput | AlocacaoCreateManyDisciplinaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AlocacaoUpsertWithWhereUniqueWithoutDisciplinaInput = {
+    where: AlocacaoWhereUniqueInput
+    update: XOR<AlocacaoUpdateWithoutDisciplinaInput, AlocacaoUncheckedUpdateWithoutDisciplinaInput>
+    create: XOR<AlocacaoCreateWithoutDisciplinaInput, AlocacaoUncheckedCreateWithoutDisciplinaInput>
+  }
+
+  export type AlocacaoUpdateWithWhereUniqueWithoutDisciplinaInput = {
+    where: AlocacaoWhereUniqueInput
+    data: XOR<AlocacaoUpdateWithoutDisciplinaInput, AlocacaoUncheckedUpdateWithoutDisciplinaInput>
+  }
+
+  export type AlocacaoUpdateManyWithWhereWithoutDisciplinaInput = {
+    where: AlocacaoScalarWhereInput
+    data: XOR<AlocacaoUpdateManyMutationInput, AlocacaoUncheckedUpdateManyWithoutDisciplinaInput>
   }
 
   export type SalaCreateWithoutAlocacoesInput = {
@@ -6715,6 +8060,20 @@ export namespace Prisma {
   export type SalaCreateOrConnectWithoutAlocacoesInput = {
     where: SalaWhereUniqueInput
     create: XOR<SalaCreateWithoutAlocacoesInput, SalaUncheckedCreateWithoutAlocacoesInput>
+  }
+
+  export type DisciplinaCreateWithoutAlocacoesInput = {
+    Nome: string
+  }
+
+  export type DisciplinaUncheckedCreateWithoutAlocacoesInput = {
+    Id?: number
+    Nome: string
+  }
+
+  export type DisciplinaCreateOrConnectWithoutAlocacoesInput = {
+    where: DisciplinaWhereUniqueInput
+    create: XOR<DisciplinaCreateWithoutAlocacoesInput, DisciplinaUncheckedCreateWithoutAlocacoesInput>
   }
 
   export type SalaUpsertWithoutAlocacoesInput = {
@@ -6745,6 +8104,26 @@ export namespace Prisma {
     Capacidade?: IntFieldUpdateOperationsInput | number
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DisciplinaUpsertWithoutAlocacoesInput = {
+    update: XOR<DisciplinaUpdateWithoutAlocacoesInput, DisciplinaUncheckedUpdateWithoutAlocacoesInput>
+    create: XOR<DisciplinaCreateWithoutAlocacoesInput, DisciplinaUncheckedCreateWithoutAlocacoesInput>
+    where?: DisciplinaWhereInput
+  }
+
+  export type DisciplinaUpdateToOneWithWhereWithoutAlocacoesInput = {
+    where?: DisciplinaWhereInput
+    data: XOR<DisciplinaUpdateWithoutAlocacoesInput, DisciplinaUncheckedUpdateWithoutAlocacoesInput>
+  }
+
+  export type DisciplinaUpdateWithoutAlocacoesInput = {
+    Nome?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DisciplinaUncheckedUpdateWithoutAlocacoesInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Nome?: StringFieldUpdateOperationsInput | string
   }
 
   export type SalaCreateManyTipoInput = {
@@ -6827,6 +8206,7 @@ export namespace Prisma {
     DiaDaSemana?: number | null
     HoraInicio: string
     HoraFim: string
+    DisciplinaId: number
     CreatedAt?: Date | string
     UpdatedAt?: Date | string
     DeletedAt?: Date | string | null
@@ -6840,6 +8220,7 @@ export namespace Prisma {
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    Disciplina?: DisciplinaUpdateOneRequiredWithoutAlocacoesNestedInput
   }
 
   export type AlocacaoUncheckedUpdateWithoutSalaInput = {
@@ -6848,6 +8229,7 @@ export namespace Prisma {
     DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
+    DisciplinaId?: IntFieldUpdateOperationsInput | number
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6859,6 +8241,54 @@ export namespace Prisma {
     DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
+    DisciplinaId?: IntFieldUpdateOperationsInput | number
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AlocacaoCreateManyDisciplinaInput = {
+    Id?: number
+    Data?: Date | string | null
+    DiaDaSemana?: number | null
+    HoraInicio: string
+    HoraFim: string
+    SalaId: number
+    CreatedAt?: Date | string
+    UpdatedAt?: Date | string
+    DeletedAt?: Date | string | null
+  }
+
+  export type AlocacaoUpdateWithoutDisciplinaInput = {
+    Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    HoraInicio?: StringFieldUpdateOperationsInput | string
+    HoraFim?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    Sala?: SalaUpdateOneRequiredWithoutAlocacoesNestedInput
+  }
+
+  export type AlocacaoUncheckedUpdateWithoutDisciplinaInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    HoraInicio?: StringFieldUpdateOperationsInput | string
+    HoraFim?: StringFieldUpdateOperationsInput | string
+    SalaId?: IntFieldUpdateOperationsInput | number
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AlocacaoUncheckedUpdateManyWithoutDisciplinaInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    HoraInicio?: StringFieldUpdateOperationsInput | string
+    HoraFim?: StringFieldUpdateOperationsInput | string
+    SalaId?: IntFieldUpdateOperationsInput | number
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     UpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     DeletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

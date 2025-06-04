@@ -20,7 +20,7 @@ async function bootstrap() {
     .addTag('Curso', 'Endpoints para gerenciamento de cursos')
     .addTag('Disciplina', 'Endpoints para gerenciamento de disciplinas')
     .addTag('Sala', 'Endpoints para gerenciamento de salas')
-    .addTag('Tipo Sala', 'Endpoints para gerenciamento de tipos de sala')
+    .addTag('Tipo de Sala', 'Endpoints para gerenciamento de tipos de sala')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

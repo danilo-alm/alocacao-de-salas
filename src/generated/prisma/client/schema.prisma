@@ -45,6 +45,12 @@ model Sala {
   @@index([Capacidade])
 }
 
+model Disciplina {
+  Id        Int        @id @default(autoincrement())
+  Nome      String     @unique
+  Alocacoes Alocacao[]
+}
+
 model Alocacao {
   Id          Int       @id @default(autoincrement())
   Data        DateTime? @db.Date
@@ -54,6 +60,9 @@ model Alocacao {
 
   SalaId Int
   Sala   Sala @relation(fields: [SalaId], references: [Id])
+
+  DisciplinaId Int
+  Disciplina   Disciplina @relation(fields: [DisciplinaId], references: [Id])
 
   CreatedAt DateTime  @default(now()) @db.Timestamp(2)
   UpdatedAt DateTime  @updatedAt @db.Timestamp(2)
