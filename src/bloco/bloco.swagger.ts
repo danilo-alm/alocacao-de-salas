@@ -1,4 +1,4 @@
-import { applyDecorators, Delete, Get, Patch, Post } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import {
   ApiBody,
@@ -15,7 +15,6 @@ import { UpdateBlocoDto } from './dto/update-bloco.dto';
 
 export function CreateDocs() {
   return applyDecorators(
-    Post(),
     ApiOperation({ summary: 'Criar um novo bloco' }),
     ApiBody({
       type: CreateBlocoDto,
@@ -42,7 +41,6 @@ export function CreateDocs() {
 
 export function FindAllDocs() {
   return applyDecorators(
-    Get(),
     ApiOperation({ summary: 'Listar todos os blocos' }),
     ApiQuery({
       name: 'search',
@@ -60,7 +58,6 @@ export function FindAllDocs() {
 
 export function FindOneDocs() {
   return applyDecorators(
-    Get(':id'),
     ApiOperation({ summary: 'Buscar um bloco por ID' }),
     ApiParam({
       name: 'id',
@@ -82,7 +79,6 @@ export function FindOneDocs() {
 
 export function UpdateDocs() {
   return applyDecorators(
-    Patch(':id'),
     ApiOperation({ summary: 'Atualizar um bloco' }),
     ApiParam({
       name: 'id',
@@ -119,7 +115,6 @@ export function UpdateDocs() {
 
 export function RemoveDocs() {
   return applyDecorators(
-    Delete(':id'),
     ApiOperation({ summary: 'Remover um bloco' }),
     ApiParam({
       name: 'id',

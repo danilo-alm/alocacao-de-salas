@@ -1,4 +1,4 @@
-import { applyDecorators, Delete, Get, Patch, Post } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
@@ -9,7 +9,6 @@ import { UpdateSalaDto } from './dto/update-sala.dto';
 
 export function CreateDocs() {
   return applyDecorators(
-    Post(),
     ApiOperation({ summary: 'Criar uma nova sala' }),
     ApiBody({
       type: CreateSalaDto,
@@ -39,7 +38,6 @@ export function CreateDocs() {
 
 export function FindAllDocs() {
   return applyDecorators(
-    Get(),
     ApiOperation({ summary: 'Listar todas as salas' }),
     ApiResponse({
       status: HttpStatus.OK,
@@ -51,7 +49,6 @@ export function FindAllDocs() {
 
 export function FindOneDocs() {
   return applyDecorators(
-    Get(':id'),
     ApiOperation({ summary: 'Buscar uma sala por id' }),
     ApiParam({
       name: 'id',
@@ -73,7 +70,6 @@ export function FindOneDocs() {
 
 export function UpdateDocs() {
   return applyDecorators(
-    Patch(':id'),
     ApiOperation({ summary: 'Atualizar uma sala' }),
     ApiParam({
       name: 'id',
@@ -113,7 +109,6 @@ export function UpdateDocs() {
 
 export function RemoveDocs() {
   return applyDecorators(
-    Delete(':id'),
     ApiOperation({ summary: 'Remover uma sala' }),
     ApiParam({
       name: 'id',
