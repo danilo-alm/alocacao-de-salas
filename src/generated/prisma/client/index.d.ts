@@ -5425,7 +5425,7 @@ export namespace Prisma {
   export type AlocacaoGroupByOutputType = {
     Id: number
     Data: Date | null
-    DiaDaSemana: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     SalaId: number
@@ -5499,7 +5499,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       Id: number
       Data: Date | null
-      DiaDaSemana: number | null
+      DiaDaSemana: number
       HoraInicio: string
       HoraFim: string
       SalaId: number
@@ -6613,7 +6613,7 @@ export namespace Prisma {
     NOT?: AlocacaoWhereInput | AlocacaoWhereInput[]
     Id?: IntFilter<"Alocacao"> | number
     Data?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
-    DiaDaSemana?: IntNullableFilter<"Alocacao"> | number | null
+    DiaDaSemana?: IntFilter<"Alocacao"> | number
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
@@ -6628,7 +6628,7 @@ export namespace Prisma {
   export type AlocacaoOrderByWithRelationInput = {
     Id?: SortOrder
     Data?: SortOrderInput | SortOrder
-    DiaDaSemana?: SortOrderInput | SortOrder
+    DiaDaSemana?: SortOrder
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
@@ -6648,7 +6648,7 @@ export namespace Prisma {
     OR?: AlocacaoWhereInput[]
     NOT?: AlocacaoWhereInput | AlocacaoWhereInput[]
     Data?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
-    DiaDaSemana?: IntNullableFilter<"Alocacao"> | number | null
+    DiaDaSemana?: IntFilter<"Alocacao"> | number
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
@@ -6663,7 +6663,7 @@ export namespace Prisma {
   export type AlocacaoOrderByWithAggregationInput = {
     Id?: SortOrder
     Data?: SortOrderInput | SortOrder
-    DiaDaSemana?: SortOrderInput | SortOrder
+    DiaDaSemana?: SortOrder
     HoraInicio?: SortOrder
     HoraFim?: SortOrder
     SalaId?: SortOrder
@@ -6684,7 +6684,7 @@ export namespace Prisma {
     NOT?: AlocacaoScalarWhereWithAggregatesInput | AlocacaoScalarWhereWithAggregatesInput[]
     Id?: IntWithAggregatesFilter<"Alocacao"> | number
     Data?: DateTimeNullableWithAggregatesFilter<"Alocacao"> | Date | string | null
-    DiaDaSemana?: IntNullableWithAggregatesFilter<"Alocacao"> | number | null
+    DiaDaSemana?: IntWithAggregatesFilter<"Alocacao"> | number
     HoraInicio?: StringWithAggregatesFilter<"Alocacao"> | string
     HoraFim?: StringWithAggregatesFilter<"Alocacao"> | string
     SalaId?: IntWithAggregatesFilter<"Alocacao"> | number
@@ -6873,7 +6873,7 @@ export namespace Prisma {
 
   export type AlocacaoCreateInput = {
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     CreatedAt?: Date | string
@@ -6886,7 +6886,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedCreateInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     SalaId: number
@@ -6898,7 +6898,7 @@ export namespace Prisma {
 
   export type AlocacaoUpdateInput = {
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6911,7 +6911,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number
@@ -6924,7 +6924,7 @@ export namespace Prisma {
   export type AlocacaoCreateManyInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     SalaId: number
@@ -6936,7 +6936,7 @@ export namespace Prisma {
 
   export type AlocacaoUpdateManyMutationInput = {
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6947,7 +6947,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateManyInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number
@@ -7220,17 +7220,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type SalaScalarRelationFilter = {
     is?: SalaWhereInput
     isNot?: SalaWhereInput
@@ -7324,22 +7313,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type SalaCreateNestedManyWithoutTipoInput = {
@@ -7570,14 +7543,6 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type SalaUpdateOneRequiredWithoutAlocacoesNestedInput = {
     create?: XOR<SalaCreateWithoutAlocacoesInput, SalaUncheckedCreateWithoutAlocacoesInput>
     connectOrCreate?: SalaCreateOrConnectWithoutAlocacoesInput
@@ -7701,17 +7666,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -7726,7 +7680,7 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
     notIn?: number[] | null
@@ -7734,23 +7688,7 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type SalaCreateWithoutTipoInput = {
@@ -7886,7 +7824,7 @@ export namespace Prisma {
 
   export type AlocacaoCreateWithoutSalaInput = {
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     CreatedAt?: Date | string
@@ -7898,7 +7836,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedCreateWithoutSalaInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     DisciplinaId: number
@@ -7979,7 +7917,7 @@ export namespace Prisma {
     NOT?: AlocacaoScalarWhereInput | AlocacaoScalarWhereInput[]
     Id?: IntFilter<"Alocacao"> | number
     Data?: DateTimeNullableFilter<"Alocacao"> | Date | string | null
-    DiaDaSemana?: IntNullableFilter<"Alocacao"> | number | null
+    DiaDaSemana?: IntFilter<"Alocacao"> | number
     HoraInicio?: StringFilter<"Alocacao"> | string
     HoraFim?: StringFilter<"Alocacao"> | string
     SalaId?: IntFilter<"Alocacao"> | number
@@ -7991,7 +7929,7 @@ export namespace Prisma {
 
   export type AlocacaoCreateWithoutDisciplinaInput = {
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     CreatedAt?: Date | string
@@ -8003,7 +7941,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedCreateWithoutDisciplinaInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     SalaId: number
@@ -8203,7 +8141,7 @@ export namespace Prisma {
   export type AlocacaoCreateManySalaInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     DisciplinaId: number
@@ -8214,7 +8152,7 @@ export namespace Prisma {
 
   export type AlocacaoUpdateWithoutSalaInput = {
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8226,7 +8164,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateWithoutSalaInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     DisciplinaId?: IntFieldUpdateOperationsInput | number
@@ -8238,7 +8176,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateManyWithoutSalaInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     DisciplinaId?: IntFieldUpdateOperationsInput | number
@@ -8250,7 +8188,7 @@ export namespace Prisma {
   export type AlocacaoCreateManyDisciplinaInput = {
     Id?: number
     Data?: Date | string | null
-    DiaDaSemana?: number | null
+    DiaDaSemana: number
     HoraInicio: string
     HoraFim: string
     SalaId: number
@@ -8261,7 +8199,7 @@ export namespace Prisma {
 
   export type AlocacaoUpdateWithoutDisciplinaInput = {
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8273,7 +8211,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateWithoutDisciplinaInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number
@@ -8285,7 +8223,7 @@ export namespace Prisma {
   export type AlocacaoUncheckedUpdateManyWithoutDisciplinaInput = {
     Id?: IntFieldUpdateOperationsInput | number
     Data?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    DiaDaSemana?: NullableIntFieldUpdateOperationsInput | number | null
+    DiaDaSemana?: IntFieldUpdateOperationsInput | number
     HoraInicio?: StringFieldUpdateOperationsInput | string
     HoraFim?: StringFieldUpdateOperationsInput | string
     SalaId?: IntFieldUpdateOperationsInput | number

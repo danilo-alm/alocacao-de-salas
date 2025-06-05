@@ -54,7 +54,7 @@ model Disciplina {
 model Alocacao {
   Id          Int       @id @default(autoincrement())
   Data        DateTime? @db.Date
-  DiaDaSemana Int?      @db.TinyInt // 0 (Domingo) a 6 (Sábado)
+  DiaDaSemana Int       @db.TinyInt // 0 (Domingo) a 6 (Sábado)
   HoraInicio  String // formatada tipo "08:00"
   HoraFim     String // formatada tipo "10:00"
 
