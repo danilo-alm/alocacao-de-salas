@@ -43,6 +43,7 @@ export default tseslint.config(
         'code': 80,
         'ignoreUrls': true,
         'ignoreStrings': true,
+        'ignoreComments': true,
       }],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
