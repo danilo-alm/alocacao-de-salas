@@ -6,5 +6,6 @@ import { SalaService } from './sala.service';
 @Module({
   controllers: [SalaController],
   providers: [SalaService],
+  exports: [SalaService],
 })
 export class SalaModule {}

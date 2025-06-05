@@ -38,6 +38,8 @@ export class SalaService {
       },
     });
 
+    // AlocacaoService.create() *depends* on this exception being thrown...
+    // Be aware if changing
     if (!result) {
       throw new EntityDoesNotExistException('Sala não encontrada');
     }
