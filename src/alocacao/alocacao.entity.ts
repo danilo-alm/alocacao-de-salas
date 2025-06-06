@@ -30,13 +30,12 @@ export class AlocacaoEntity {
   Data?: Date;
 
   @IsInt()
-  @IsOptional()
   @ApiProperty({
     description: 'Dia da semana (0-6, onde 0 é Domingo)',
     example: 1,
     required: false,
   })
-  DiaDaSemana?: number;
+  DiaDaSemana: number;
 
   @IsNotEmpty()
   @IsString()
