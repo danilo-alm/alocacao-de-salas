@@ -128,39 +128,29 @@ export class AlocacaoService {
     return DtoMapper.toDto(AlocacaoResponseDto, result);
   }
 
-  private validateAndPopulateAlocacaoRequest(
-    createAlocacaoDto: CreateAlocacaoDto,
-  ) {
-    const diaSemanaAlocacao = createAlocacaoDto.DiaDaSemana;
-    const dataAlocacao = createAlocacaoDto.Data;
+  private validateAndPopulateAlocacaoRequest(dto: CreateAlocacaoDto) {
+    const { DiaDaSemana, Data } = dto;
 
-    if (
-      diaSemanaAlocacao === null ||
-      (diaSemanaAlocacao === undefined && !dataAlocacao)
-    ) {
+    if (DiaDaSemana == null && !Data) {
       throw new InvalidBookingException(
         'DiaDaSemana ou Data devem ser especificados',
       );
     }
 
-    // Check if a fixed-date allocation is in the past
-    if (dataAlocacao) {
+    if (Data) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      const allocationDate = new Date(dataAlocacao);
+      const allocationDate = new Date(Data);
       allocationDate.setHours(0, 0, 0, 0);
-      createAlocacaoDto.DiaDaSemana = dataAlocacao.getDay();
+
+      dto.DiaDaSemana = allocationDate.getDay();
 
       if (allocationDate < today) {
         throw new InvalidBookingException(
           'Não é possível criar uma alocação em uma data passada.',
         );
       }
-    } else if (diaSemanaAlocacao === null || diaSemanaAlocacao === undefined) {
-      throw new InvalidBookingException(
-        'DiaDaSemana deve ser especificado para alocações recorrentes.',
-      );
     }
   }
 
