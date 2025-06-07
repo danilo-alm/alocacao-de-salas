@@ -22,11 +22,10 @@ const ALOCACAO_WITH_SALA_DETAILS_INCLUDE: Prisma.AlocacaoInclude = {
 
 @Injectable()
 export class AlocacaoService {
-  private prisma: PrismaClient;
-
-  constructor(private readonly salaService: SalaService) {
-    this.prisma = new PrismaClient();
-  }
+  constructor(
+    private readonly salaService: SalaService,
+    private readonly prisma: PrismaClient,
+  ) {}
 
   async findAll(): Promise<AlocacaoResponseDto[]> {
     const result = await this.prisma.alocacao.findMany({

@@ -12,11 +12,7 @@ import { UpdateDisciplinaDto } from './dto/update-disciplina.dto';
 
 @Injectable()
 export class DisciplinaService {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   async findAll(): Promise<DisciplinaResponseDto[]> {
     const result = await this.prisma.disciplina.findMany();

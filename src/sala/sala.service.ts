@@ -12,11 +12,7 @@ import { UpdateSalaDto } from './dto/update-sala.dto';
 
 @Injectable()
 export class SalaService {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   async findAll(): Promise<SalaResponseDto[]> {
     const result = await this.prisma.sala.findMany({

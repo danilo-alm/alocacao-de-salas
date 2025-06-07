@@ -12,11 +12,7 @@ import { UpdateBlocoDto } from './dto/update-bloco.dto';
 
 @Injectable()
 export class BlocoService {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   async create(createBlocoDto: CreateBlocoDto): Promise<BlocoResponseDto> {
     try {

@@ -12,11 +12,7 @@ import { UpdateTipoSalaDto } from './dto/update-tipo-sala.dto';
 
 @Injectable()
 export class TipoSalaService {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaClient) {}
 
   async findAll(): Promise<TipoSalaResponseDto[]> {
     const result = await this.prisma.tipoSala.findMany();
