@@ -55,8 +55,8 @@ model alocacao {
   id            Int         @id @default(autoincrement())
   data          DateTime?   @db.Date
   dia_da_semana Int         @db.TinyInt  // 0 (Domingo) a 6 (Sábado)
-  hora_inicio   DateTime    @db.Time()
-  hora_fim      DateTime    @db.Time()
+  hora_inicio   String
+  hora_fim      String
 
   sala_id       Int
   sala          sala        @relation(fields: [sala_id], references: [id])
@@ -68,7 +68,7 @@ model alocacao {
   updated_at     DateTime   @updatedAt @db.Timestamp(2)
   deleted_at     DateTime?  @db.Timestamp(2)
 
-  @@index([sala_id])
-  @@unique([sala_id, data, hora_inicio, hora_fim], name: "uq_alocacao_sala_data_horas") // Prevent double-booking
+  @@index([disciplina_id])
+  @@unique([sala_id, data, hora_inicio, hora_fim, deleted_at], name: "uq_alocacao_sala_data_horas") // Prevent double-booking
   // Overlapping prevention still needs to be handled in the application logic
 }
