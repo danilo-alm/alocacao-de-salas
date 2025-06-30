@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { ValidationException } from 'src/common/exception/validation.exception';
 import { DtoMapper } from 'src/common/mapper/dto-mapper';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-import { Prisma } from '../generated/prisma/client';
 import { SalaService } from '../sala/sala.service';
+import { AlocacaoConflictChecker } from './conflict/alocacao-conflict-checker';
 import { AlocacaoResponseDto } from './dto/alocacao-response.dto';
 import { AlocacaoResponseWithSalaBaseDto } from './dto/alocacao-response-with-sala-base.dto';
 import { AlocacaoScheduleDetails } from './dto/alocacao-schedule-details';
 import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from './dto/update-alocacao.dto';
-import { BookingConflictException } from './exceptions/booking-conflict-exception';
 import { InvalidBookingException } from './exceptions/invalid-booking-exception';
 import { alocacaoFullSelect } from './select/alocacao-full-select';
 import { AlocacaoWithSalaBaseSelect } from './select/alocacao-with-sala-base-select';
@@ -27,24 +25,16 @@ export class AlocacaoService {
   async create(
     createAlocacaoDto: CreateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
-    this.validateAndPopulateAlocacaoRequest(createAlocacaoDto);
+    CreateAlocacaoProcessor.process(createAlocacaoDto);
 
-    if (createAlocacaoDto.dia_da_semana == null) {
-      console.error(
-        'Falha na validação: O campo obrigatório dia_da_semana não foi definido:',
-        createAlocacaoDto,
-      );
-      throw new ValidationException(
-        'Erro interno de validação. Por favor, contate o suporte',
-      );
-    }
-
-    await this.checkConflicts(createAlocacaoDto as AlocacaoScheduleDetails);
+    await AlocacaoConflictChecker.checkConflicts(
+      createAlocacaoDto as AlocacaoScheduleDetails,
+    );
 
     const alocacao = await this.prisma.alocacao.create({
       data: {
         ...createAlocacaoDto,
-        dia_da_semana: createAlocacaoDto.dia_da_semana,
+        dia_da_semana: createAlocacaoDto.dia_da_semana!,
       },
       // FIXME: information about the sala and disciplina are not being fetched for some reason?
       select: alocacaoFullSelect,
@@ -104,7 +94,10 @@ export class AlocacaoService {
     };
 
     const result = await this.prisma.$transaction(async (tx) => {
-      await this.checkConflicts(mergedScheduleDetails, current.id);
+      await AlocacaoConflictChecker.checkConflicts(
+        mergedScheduleDetails,
+        current.id,
+      );
 
       return await tx.alocacao.update({
         where: { id: id },
@@ -124,107 +117,50 @@ export class AlocacaoService {
     });
     return DtoMapper.toDto(AlocacaoResponseDto, result);
   }
+}
 
-  private validateAndPopulateAlocacaoRequest(dto: CreateAlocacaoDto) {
-    const { dia_da_semana, data } = dto;
+class CreateAlocacaoProcessor {
+  public static process(dto: CreateAlocacaoDto): void {
+    // Validates the object and populates dia_da_semana if Date is passed
+    this.validateRequest(dto);
+    if (dto.data) {
+      dto.dia_da_semana = dto.data.getDay();
+      this.assertBookingDateIsValid(dto.data);
+    }
+  }
 
-    const hasDiaDaSemana = dia_da_semana != null;
-    if ((hasDiaDaSemana && data) || (!hasDiaDaSemana && !data)) {
+  private static validateRequest(dto: CreateAlocacaoDto): void {
+    this.ensureExactlyOneTimeSpecifier(dto);
+    if (dto.dia_da_semana != null) {
+      this.validateDiaDaSemana(dto.dia_da_semana);
+    }
+  }
+
+  private static ensureExactlyOneTimeSpecifier(dto: CreateAlocacaoDto): void {
+    if ((dto.dia_da_semana != null) === (dto.data != null)) {
       throw new InvalidBookingException(
         'Apenas um entre dia_da_semana e data deve ser especificado',
       );
     }
+  }
 
-    // Should be caught by class-transformer validation. Just a safeguard
-    if (hasDiaDaSemana && (dia_da_semana < 0 || dia_da_semana > 6)) {
+  private static validateDiaDaSemana(dia: number): void {
+    if (dia < 0 || dia > 6) {
       throw new InvalidBookingException('Dia da semana deve estar entre 0 e 6');
-    }
-
-    if (!hasDiaDaSemana && data) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const allocationDate = new Date(data);
-      allocationDate.setHours(0, 0, 0, 0);
-
-      dto.dia_da_semana = allocationDate.getDay();
-
-      if (allocationDate < today) {
-        throw new InvalidBookingException(
-          'Não é possível criar uma alocação em uma data passada.',
-        );
-      }
     }
   }
 
-  private async checkConflicts(
-    details: AlocacaoScheduleDetails,
-    idToExclude?: number,
-  ): Promise<void> {
-    const timeOverlapFilter: Prisma.alocacaoWhereInput = {
-      hora_inicio: { lt: details.hora_fim },
-      hora_fim: { gt: details.hora_inicio },
-    };
-
-    const orClauses: Prisma.alocacaoWhereInput[] = [];
-
-    if (details.data) {
-      // Case 1: The new allocation is for a Fixed-Date.
-
-      // Scenario 1.1: Conflicts with an existing Fixed-Date allocation on the exact same date
-      orClauses.push({
-        AND: [{ data: details.data }, timeOverlapFilter],
-      });
-
-      // Scenario 1.2: Conflicts with an existing Recurring allocation on the same day of the week
-      orClauses.push({
-        AND: [
-          { data: null },
-          { dia_da_semana: details.dia_da_semana },
-          timeOverlapFilter,
-        ],
-      });
-    } else {
-      // Case 2: The new allocation is Recurring (createAlocacaoDto.data is null).
-
-      // Scenario 2.1: Conflicts with an existing Fixed-Date allocation.
-      orClauses.push({
-        AND: [
-          { data: { not: null } },
-          { dia_da_semana: details.dia_da_semana },
-          timeOverlapFilter,
-        ],
-      });
-
-      // Scenario 2.2: Conflicts with an existing Recurring allocation on the same day of the week.
-      orClauses.push({
-        AND: [
-          { data: null },
-          { dia_da_semana: details.dia_da_semana },
-          timeOverlapFilter,
-        ],
-      });
-    }
-
-    const whereQuery: Prisma.alocacaoWhereInput = {
-      sala_id: details.sala_id,
-      deleted_at: null,
-    };
-
-    if (idToExclude) {
-      whereQuery.NOT = { id: idToExclude };
-    }
-
-    whereQuery.OR = orClauses;
-
-    const result = await this.prisma.alocacao.findFirst({
-      where: whereQuery,
-    });
-
-    if (result) {
-      throw new BookingConflictException(
-        `Houve um conflito de horários com o booking de ID ${result.id}.`,
+  private static assertBookingDateIsValid(bookingDate: Date): void {
+    if (bookingDate < this.getTodayDateAtMidnight()) {
+      throw new InvalidBookingException(
+        'Não é possível criar uma alocação em uma data passada.',
       );
     }
+  }
+
+  private static getTodayDateAtMidnight(): Date {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
   }
 }
