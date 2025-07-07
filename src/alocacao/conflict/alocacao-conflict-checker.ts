@@ -1,112 +1,117 @@
 import { Prisma } from 'src/generated/prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 import { AlocacaoScheduleDetails } from '../dto/alocacao-schedule-details';
 
 export class AlocacaoConflictChecker {
-  private static currentAlocacao: AlocacaoScheduleDetails;
-  private static finalWhereQuery: Prisma.alocacaoWhereInput;
-  private static timeOverlapFilter: Prisma.alocacaoWhereInput;
-  private static orClauses: Prisma.alocacaoWhereInput[];
-  private static excludeIdFromCheck?: number;
+  constructor(private readonly prisma: PrismaService) {}
 
-  public static async checkConclictsOnCreate(
-    details: AlocacaoScheduleDetails,
-  ): Promise<void> {
-    this.excludeIdFromCheck = undefined;
-    return this.checkConflicts(details);
+  public async findConclictingAlocacoesFor(
+    alocacao: AlocacaoScheduleDetails,
+  ): Promise<number[]> {
+    const timeOverlapFilter = this.buildTimeOverlapFilterFor(alocacao);
+    const conflictClauses = this.buildConflictClausesFor(
+      alocacao,
+      timeOverlapFilter,
+    );
+    const whereQuery = this.buildFinalWhereQuery(alocacao, conflictClauses);
+    return await this.getConflicts(whereQuery);
   }
 
-  public static async checkConclictsOnUpdate(
-    details: AlocacaoScheduleDetails,
-    idToExclude: number,
-  ): Promise<void> {
-    this.excludeIdFromCheck = idToExclude;
-    return this.checkConflicts(details);
-  }
-
-  private static async checkConflicts(
-    details: AlocacaoScheduleDetails,
-  ): Promise<void> {
-    this.setCurrentAlocacao(details);
-    this.setTimeOverlapFilter();
-    this.setOrClauses();
-  }
-
-  private static setCurrentAlocacao(details: AlocacaoScheduleDetails): void {
-    this.currentAlocacao = details;
-  }
-
-  private static setTimeOverlapFilter(): void {
-    this.timeOverlapFilter = {
-      hora_inicio: { lt: this.currentAlocacao.hora_fim },
-      hora_fim: { gt: this.currentAlocacao.hora_inicio },
+  private buildTimeOverlapFilterFor(
+    alocacao: AlocacaoScheduleDetails,
+  ): Prisma.alocacaoWhereInput {
+    return {
+      hora_inicio: { lt: alocacao.hora_fim },
+      hora_fim: { gt: alocacao.hora_inicio },
     };
   }
 
-  private static setOrClauses(): void {
-    this.orClauses = [];
-    if (this.isRecurringAlocacao()) {
-      this.pushOrClausesForRecurringAlocacao();
-    } else {
-      this.pushOrClausesForFixedAlocacao();
-    }
+  private buildConflictClausesFor(
+    alocacao: AlocacaoScheduleDetails,
+    timeOverlapFilter: Prisma.alocacaoWhereInput,
+  ): Prisma.alocacaoWhereInput[] {
+    return this.isRecurringAlocacao(alocacao)
+      ? this.buildConflictClausesForRecurringAlocacao(
+          alocacao,
+          timeOverlapFilter,
+        )
+      : this.buildConflictClausesForFixedAlocacao(alocacao, timeOverlapFilter);
   }
 
-  private static isRecurringAlocacao(): boolean {
-    return this.currentAlocacao.dia_da_semana != null;
+  private isRecurringAlocacao(alocacao: AlocacaoScheduleDetails): boolean {
+    return alocacao.dia_da_semana != null;
   }
 
-  private static pushOrClausesForRecurringAlocacao(): void {
+  private buildConflictClausesForRecurringAlocacao(
+    alocacao: AlocacaoScheduleDetails,
+    timeOverlapFilter: Prisma.alocacaoWhereInput,
+  ): Prisma.alocacaoWhereInput[] {
+    const orClauses: Prisma.alocacaoWhereInput[] = [];
+
     // Scenario 2.1: Conflicts with an existing Fixed-Date allocation.
-    this.orClauses.push({
+    orClauses.push({
       AND: [
         { data: { not: null } },
-        { dia_da_semana: this.currentAlocacao.dia_da_semana },
-        this.timeOverlapFilter,
+        { dia_da_semana: alocacao.dia_da_semana },
+        timeOverlapFilter,
       ],
     });
 
     // Scenario 2.2: Conflicts with an existing Recurring allocation on the same day of the week.
-    this.orClauses.push({
+    orClauses.push({
       AND: [
         { data: null },
-        { dia_da_semana: this.currentAlocacao.dia_da_semana },
-        this.timeOverlapFilter,
+        { dia_da_semana: alocacao.dia_da_semana },
+        timeOverlapFilter,
       ],
     });
+
+    return orClauses;
   }
 
-  private static pushOrClausesForFixedAlocacao(): void {
+  private buildConflictClausesForFixedAlocacao(
+    alocacao: AlocacaoScheduleDetails,
+    timeOverlapFilter: Prisma.alocacaoWhereInput,
+  ): Prisma.alocacaoWhereInput[] {
+    const orClauses: Prisma.alocacaoWhereInput[] = [];
+
     // Scenario 1.1: Conflicts with an existing Fixed-Date allocation on the exact same date
-    this.orClauses.push({
-      AND: [{ data: this.currentAlocacao.data }, this.timeOverlapFilter],
+    orClauses.push({
+      AND: [{ data: alocacao.data }, timeOverlapFilter],
     });
 
     // Scenario 1.2: Conflicts with an existing Recurring allocation on the same day of the week
-    this.orClauses.push({
+    orClauses.push({
       AND: [
         { data: null },
-        { dia_da_semana: this.currentAlocacao.dia_da_semana },
-        this.timeOverlapFilter,
+        { dia_da_semana: alocacao.dia_da_semana },
+        timeOverlapFilter,
       ],
     });
+
+    return orClauses;
   }
 
-  private static setWhereQuery(): void {
-    this.finalWhereQuery = this.buildFinalWhereQuery();
-  }
-
-  private static buildFinalWhereQuery(): Prisma.alocacaoWhereInput {
-    const finalWhereQuery: Prisma.alocacaoWhereInput = {
-      sala_id: this.currentAlocacao.sala_id,
+  private buildFinalWhereQuery(
+    alocacao: AlocacaoScheduleDetails,
+    orClauses: Prisma.alocacaoWhereInput[],
+  ): Prisma.alocacaoWhereInput {
+    return {
+      sala_id: alocacao.sala_id,
       deleted_at: null,
+      OR: orClauses,
     };
+  }
 
-    if (this.excludeIdFromCheck != null) {
-      finalWhereQuery.NOT = { id: this.excludeIdFromCheck };
-    }
-    finalWhereQuery.OR = this.orClauses;
+  private async getConflicts(
+    whereQuery: Prisma.alocacaoWhereInput,
+  ): Promise<number[]> {
+    const result = await this.prisma.alocacao.findMany({
+      where: whereQuery,
+      select: { id: true },
+    });
 
-    return finalWhereQuery;
+    return result.map((r) => r.id);
   }
 }

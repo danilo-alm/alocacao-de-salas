@@ -39,7 +39,7 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@stylistic/indent': ['error', 2],
+      '@stylistic/indent': 'off',  // avoid conflicts with prettier
       '@stylistic/max-len': ['error', {
         'code': 80,
         'ignoreUrls': true,
