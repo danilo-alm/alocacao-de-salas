@@ -55,9 +55,8 @@ CREATE TABLE `alocacao` (
     `updated_at` TIMESTAMP(2) NOT NULL,
     `deleted_at` TIMESTAMP(2) NULL,
 
-    INDEX `alocacao_sala_id_idx`(`sala_id`),
     INDEX `alocacao_disciplina_id_idx`(`disciplina_id`),
-    UNIQUE INDEX `alocacao_sala_id_data_hora_inicio_hora_fim_key`(`sala_id`, `data`, `hora_inicio`, `hora_fim`),
+    UNIQUE INDEX `alocacao_sala_id_data_hora_inicio_hora_fim_deleted_at_key`(`sala_id`, `data`, `hora_inicio`, `hora_fim`, `deleted_at`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

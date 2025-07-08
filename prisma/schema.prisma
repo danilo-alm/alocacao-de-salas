@@ -68,8 +68,7 @@ model alocacao {
   updated_at     DateTime   @updatedAt @db.Timestamp(2)
   deleted_at     DateTime?  @db.Timestamp(2)
 
-  @@index([sala_id])
   @@index([disciplina_id])
-  @@unique([sala_id, data, hora_inicio, hora_fim], name: "uq_alocacao_sala_data_horas") // Prevent double-booking
+  @@unique([sala_id, data, hora_inicio, hora_fim, deleted_at], name: "uq_alocacao_sala_data_horas") // Prevent double-booking
   // Overlapping prevention still needs to be handled in the application logic
 }

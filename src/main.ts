@@ -8,7 +8,7 @@ import { DomainExceptionFilter } from './common/filters/domain-exception.filter'
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.disable('x-powered-by');
@@ -29,7 +29,6 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('Alocação', 'Endpoints para gerenciamento de alocações')
     .addTag('Bloco', 'Endpoints para gerenciamento de blocos')
-    .addTag('Curso', 'Endpoints para gerenciamento de cursos')
     .addTag('Disciplina', 'Endpoints para gerenciamento de disciplinas')
     .addTag('Sala', 'Endpoints para gerenciamento de salas')
     .addTag('Tipo de Sala', 'Endpoints para gerenciamento de tipos de sala')

@@ -20,6 +20,7 @@ export class AlocacaoService {
   constructor(
     private readonly salaService: SalaService,
     private readonly prisma: PrismaService,
+    private readonly conflictChecker: AlocacaoConflictChecker,
   ) {}
 
   async create(
@@ -27,7 +28,7 @@ export class AlocacaoService {
   ): Promise<AlocacaoResponseDto> {
     CreateAlocacaoProcessor.process(createAlocacaoDto);
 
-    await AlocacaoConflictChecker.checkConflicts(
+    await this.conflictChecker.throwIfConflictingAlocacoesExist(
       createAlocacaoDto as AlocacaoScheduleDetails,
     );
 
@@ -36,7 +37,6 @@ export class AlocacaoService {
         ...createAlocacaoDto,
         dia_da_semana: createAlocacaoDto.dia_da_semana!,
       },
-      // FIXME: information about the sala and disciplina are not being fetched for some reason?
       select: alocacaoFullSelect,
     });
     return DtoMapper.toDto(AlocacaoResponseDto, alocacao);
@@ -94,10 +94,15 @@ export class AlocacaoService {
     };
 
     const result = await this.prisma.$transaction(async (tx) => {
-      await AlocacaoConflictChecker.checkConflicts(
+      const conflicts = await this.conflictChecker.findConclictingAlocacoesFor(
         mergedScheduleDetails,
-        current.id,
       );
+
+      if (conflicts.filter((x) => x != current.id).length > 0) {
+        throw new InvalidBookingException(
+          'Não é possível atualizar a alocação, pois existem conflitos com outras alocações.',
+        );
+      }
 
       return await tx.alocacao.update({
         where: { id: id },

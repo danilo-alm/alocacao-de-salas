@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsDate,
   IsInt,
@@ -21,7 +21,15 @@ export class AlocacaoBaseDto implements alocacao {
   id: number;
 
   @IsOptional()
-  @Type(() => Date)
+  @Transform(
+    ({ value }: { value: string }) => {
+      console.log('converting...');
+      return value ? new Date(`${value}T00:00:00`) : null;
+    },
+    {
+      toClassOnly: true,
+    },
+  )
   @IsDate({ message: 'Data deve seguir formato yyyy-mm-dd' })
   @ApiProperty({
     description: 'Data da alocação (formato yyyy-mm-dd)',

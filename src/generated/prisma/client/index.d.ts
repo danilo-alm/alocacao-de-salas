@@ -7246,6 +7246,7 @@ export namespace Prisma {
     data: Date | string
     hora_inicio: string
     hora_fim: string
+    deleted_at: Date | string
   }
 
   export type alocacaoCountOrderByAggregateInput = {

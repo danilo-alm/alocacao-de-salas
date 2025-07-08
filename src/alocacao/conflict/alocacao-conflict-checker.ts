@@ -1,21 +1,43 @@
+import { Injectable } from '@nestjs/common';
 import { Prisma } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { AlocacaoScheduleDetails } from '../dto/alocacao-schedule-details';
+import { BookingConflictException } from '../exceptions/booking-conflict-exception';
 
+@Injectable()
 export class AlocacaoConflictChecker {
   constructor(private readonly prisma: PrismaService) {}
+
+  public async throwIfConflictingAlocacoesExist(
+    alocacao: AlocacaoScheduleDetails,
+  ): Promise<void> {
+    const conflictingAlocacoes =
+      await this.findConclictingAlocacoesFor(alocacao);
+
+    if (conflictingAlocacoes.length > 0) {
+      throw new BookingConflictException(
+        `A alocação conflita com as alocações existentes: ${conflictingAlocacoes.join(', ')}`,
+      );
+    }
+  }
 
   public async findConclictingAlocacoesFor(
     alocacao: AlocacaoScheduleDetails,
   ): Promise<number[]> {
+    const whereQuery = this.buildWhereQueryFor(alocacao);
+    return await this.getConflicts(whereQuery);
+  }
+
+  private buildWhereQueryFor(
+    alocacao: AlocacaoScheduleDetails,
+  ): Prisma.alocacaoWhereInput {
     const timeOverlapFilter = this.buildTimeOverlapFilterFor(alocacao);
     const conflictClauses = this.buildConflictClausesFor(
       alocacao,
       timeOverlapFilter,
     );
-    const whereQuery = this.buildFinalWhereQuery(alocacao, conflictClauses);
-    return await this.getConflicts(whereQuery);
+    return this.buildFinalWhereQuery(alocacao, conflictClauses);
   }
 
   private buildTimeOverlapFilterFor(
