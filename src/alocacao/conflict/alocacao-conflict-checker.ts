@@ -13,7 +13,7 @@ export class AlocacaoConflictChecker {
     alocacao: AlocacaoScheduleDetails,
   ): Promise<void> {
     const conflictingAlocacoes =
-      await this.findConclictingAlocacoesFor(alocacao);
+      await this.findConflictingAlocacoesFor(alocacao);
 
     if (conflictingAlocacoes.length > 0) {
       throw new BookingConflictException(
@@ -22,7 +22,7 @@ export class AlocacaoConflictChecker {
     }
   }
 
-  public async findConclictingAlocacoesFor(
+  public async findConflictingAlocacoesFor(
     alocacao: AlocacaoScheduleDetails,
   ): Promise<number[]> {
     const whereQuery = this.buildWhereQueryFor(alocacao);

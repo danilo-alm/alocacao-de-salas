@@ -39,6 +39,7 @@ export class AlocacaoService {
       },
       select: alocacaoFullSelect,
     });
+
     return DtoMapper.toDto(AlocacaoResponseDto, alocacao);
   }
 
@@ -72,6 +73,7 @@ export class AlocacaoService {
       AlocacaoResponseWithSalaBaseDto,
       alocacoes,
     );
+
     return new PaginatedResponseDto(alocacoesDtos, total, limit, page);
   }
 
@@ -79,26 +81,31 @@ export class AlocacaoService {
     id: number,
     updateDto: UpdateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
-    const current = await this.prisma.alocacao.findFirstOrThrow({
+    const alocacao = await this.prisma.alocacao.findFirstOrThrow({
       where: { id: id, deleted_at: null },
     });
 
     const newSalaId = updateDto.sala_id;
-    if (newSalaId && newSalaId !== current?.sala_id) {
-      await this.salaService.findOne(newSalaId);
+
+    const salaHasChanged = newSalaId != null && newSalaId !== alocacao.sala_id;
+    if (salaHasChanged) {
+      await this.assertSalaExists(newSalaId);
     }
 
-    const mergedScheduleDetails: AlocacaoScheduleDetails = {
-      ...current,
+    const updatedAlocacaoDetails: AlocacaoScheduleDetails = {
+      ...alocacao,
       ...updateDto,
     };
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const conflicts = await this.conflictChecker.findConclictingAlocacoesFor(
-        mergedScheduleDetails,
-      );
+      const conflictingAlocacoes =
+        await this.conflictChecker.findConflictingAlocacoesFor(
+          updatedAlocacaoDetails,
+        );
+      const blockingConflicts = conflictingAlocacoes.filter((x) => x != id);
+      const hasBlockingConflicts = blockingConflicts.length > 0;
 
-      if (conflicts.filter((x) => x != current.id).length > 0) {
+      if (hasBlockingConflicts) {
         throw new InvalidBookingException(
           'Não é possível atualizar a alocação, pois existem conflitos com outras alocações.',
         );
@@ -106,12 +113,16 @@ export class AlocacaoService {
 
       return await tx.alocacao.update({
         where: { id: id },
-        data: mergedScheduleDetails,
+        data: updatedAlocacaoDetails,
         select: alocacaoFullSelect,
       });
     });
 
     return DtoMapper.toDto(AlocacaoResponseDto, result);
+  }
+
+  private async assertSalaExists(salaId: number): Promise<void> {
+    await this.salaService.findOne(salaId);
   }
 
   async remove(id: number): Promise<AlocacaoResponseDto> {
