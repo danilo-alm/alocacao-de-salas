@@ -81,19 +81,21 @@ export class AlocacaoService {
     id: number,
     updateDto: UpdateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
-    const alocacao = await this.prisma.alocacao.findFirstOrThrow({
+    const alocacaoToUpdate = await this.prisma.alocacao.findFirstOrThrow({
       where: { id: id, deleted_at: null },
     });
 
     const newSalaId = updateDto.sala_id;
 
-    const salaHasChanged = newSalaId != null && newSalaId !== alocacao.sala_id;
+    const salaHasChanged =
+      newSalaId != null && newSalaId !== alocacaoToUpdate.sala_id;
+
     if (salaHasChanged) {
       await this.assertSalaExists(newSalaId);
     }
 
     const updatedAlocacaoDetails: AlocacaoScheduleDetails = {
-      ...alocacao,
+      ...alocacaoToUpdate,
       ...updateDto,
     };
 
