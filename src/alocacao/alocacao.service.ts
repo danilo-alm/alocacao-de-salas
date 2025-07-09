@@ -81,6 +81,9 @@ export class AlocacaoService {
     id: number,
     updateDto: UpdateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
+    // TODO / FIX: No validation is being done here.
+    // Date validation, time validation... a solution for creating and updating must be implemented.
+
     const alocacaoToUpdate = await this.prisma.alocacao.findFirstOrThrow({
       where: { id: id, deleted_at: null },
     });
