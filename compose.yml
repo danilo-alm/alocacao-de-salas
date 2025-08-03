@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+    environment:
+      - DATABASE_URL=mysql://user:secret@db:3306/alocacao_de_salas
+      - SHADOW_DATABASE_URL=mysql://user:secret@db:3306/shadow_alocacao_de_salas
+    ports:
+     - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:11.7
+    environment:
+      - MARIADB_USER=user
+      - MARIADB_PASSWORD=secret
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=alocacao_de_salas
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 4s
+      interval: 3s
+      timeout: 5s
+      retries: 3
+  
+volumes:
+  data:

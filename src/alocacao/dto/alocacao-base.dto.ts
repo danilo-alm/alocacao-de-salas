@@ -22,10 +22,8 @@ export class AlocacaoBaseDto implements alocacao {
 
   @IsOptional()
   @Transform(
-    ({ value }: { value: string }) => {
-      console.log('converting...');
-      return value ? new Date(`${value}T00:00:00`) : null;
-    },
+    ({ value }: { value: string }) =>
+      value ? new Date(`${value}T00:00:00`) : null,
     {
       toClassOnly: true,
     },

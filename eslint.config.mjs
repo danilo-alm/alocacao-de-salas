@@ -2,10 +2,10 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin'
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default tseslint.config(
   {
@@ -13,7 +13,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
+  eslintConfigPrettier,
   {
     languageOptions: {
       globals: {

@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 import { SalaService } from '../sala/sala.service';
 import { AlocacaoConflictChecker } from './conflict/alocacao-conflict-checker';
+import { AlocacaoBaseDto } from './dto/alocacao-base.dto';
 import { AlocacaoResponseDto } from './dto/alocacao-response.dto';
 import { AlocacaoResponseWithSalaBaseDto } from './dto/alocacao-response-with-sala-base.dto';
 import { AlocacaoScheduleDetails } from './dto/alocacao-schedule-details';
@@ -26,7 +27,7 @@ export class AlocacaoService {
   async create(
     createAlocacaoDto: CreateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
-    CreateAlocacaoProcessor.process(createAlocacaoDto);
+    AlocacaoValidator.processDto(createAlocacaoDto);
 
     await this.conflictChecker.throwIfConflictingAlocacoesExist(
       createAlocacaoDto as AlocacaoScheduleDetails,
@@ -81,21 +82,27 @@ export class AlocacaoService {
     id: number,
     updateDto: UpdateAlocacaoDto,
   ): Promise<AlocacaoResponseDto> {
-    const alocacao = await this.prisma.alocacao.findFirstOrThrow({
+    // TODO / FIX: No validation is being done here.
+    // Date validation, time validation... a solution for creating and updating must be implemented.
+
+    const alocacaoToUpdate = await this.prisma.alocacao.findFirstOrThrow({
       where: { id: id, deleted_at: null },
     });
 
     const newSalaId = updateDto.sala_id;
 
-    const salaHasChanged = newSalaId != null && newSalaId !== alocacao.sala_id;
+    const salaHasChanged =
+      newSalaId != null && newSalaId !== alocacaoToUpdate.sala_id;
+
     if (salaHasChanged) {
       await this.assertSalaExists(newSalaId);
     }
 
-    const updatedAlocacaoDetails: AlocacaoScheduleDetails = {
-      ...alocacao,
+    const updatedAlocacaoDetails: AlocacaoBaseDto = {
+      ...alocacaoToUpdate,
       ...updateDto,
     };
+    AlocacaoValidator.processDto(updatedAlocacaoDetails);
 
     const result = await this.prisma.$transaction(async (tx) => {
       const conflictingAlocacoes =
@@ -135,34 +142,39 @@ export class AlocacaoService {
   }
 }
 
-class CreateAlocacaoProcessor {
-  public static process(dto: CreateAlocacaoDto): void {
-    // Validates the object and populates dia_da_semana if Date is passed
-    this.validateRequest(dto);
-    if (dto.data) {
-      dto.dia_da_semana = dto.data.getDay();
-      this.assertBookingDateIsValid(dto.data);
+class AlocacaoValidator {
+  public static processDto(dto: CreateAlocacaoDto): void {
+    this.ensureExactlyOneTimeSpecifierInDto(dto);
+    this.ensureStartTimeAndEndTimeAreValid(dto);
+
+    const date = dto.data;
+    const isFixedDateBooking = date != null;
+
+    if (isFixedDateBooking) {
+      this.assertBookingDateIsValid(date);
+      this.setWeekdayFromBookingDateInDto(dto);
+    } else {
+      this.validateDiaDaSemana(dto.dia_da_semana!);
     }
   }
 
-  private static validateRequest(dto: CreateAlocacaoDto): void {
-    this.ensureExactlyOneTimeSpecifier(dto);
-    if (dto.dia_da_semana != null) {
-      this.validateDiaDaSemana(dto.dia_da_semana);
-    }
-  }
-
-  private static ensureExactlyOneTimeSpecifier(dto: CreateAlocacaoDto): void {
-    if ((dto.dia_da_semana != null) === (dto.data != null)) {
+  private static ensureStartTimeAndEndTimeAreValid(
+    dto: CreateAlocacaoDto,
+  ): void {
+    if (dto.hora_inicio >= dto.hora_fim) {
       throw new InvalidBookingException(
-        'Apenas um entre dia_da_semana e data deve ser especificado',
+        'hora_inicio deve ser menor que hora_fim',
       );
     }
   }
 
-  private static validateDiaDaSemana(dia: number): void {
-    if (dia < 0 || dia > 6) {
-      throw new InvalidBookingException('Dia da semana deve estar entre 0 e 6');
+  private static ensureExactlyOneTimeSpecifierInDto(
+    dto: CreateAlocacaoDto,
+  ): void {
+    if ((dto.dia_da_semana != null) === (dto.data != null)) {
+      throw new InvalidBookingException(
+        'Apenas um entre dia_da_semana e data deve ser especificado',
+      );
     }
   }
 
@@ -171,6 +183,16 @@ class CreateAlocacaoProcessor {
       throw new InvalidBookingException(
         'Não é possível criar uma alocação em uma data passada.',
       );
+    }
+  }
+
+  private static setWeekdayFromBookingDateInDto(dto: CreateAlocacaoDto): void {
+    dto.dia_da_semana = dto.data!.getDay();
+  }
+
+  private static validateDiaDaSemana(day: number): void {
+    if (day < 0 || day > 6) {
+      throw new InvalidBookingException('Dia da semana deve estar entre 0 e 6');
     }
   }
 

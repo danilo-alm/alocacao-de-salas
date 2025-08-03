@@ -4,36 +4,27 @@
 
 ## Development
 
-### Install appropriate dependencies
+### Containers
+
+You can use `compose.yml` to test the application or `compose.dev.yml` if you like to develop on containers.
 
 ```bash
-yarn install
+docker compose up --build  # test
+docker compose -f compose.dev.yml up --build  # develop
 ```
 
-### Database
+### Locally
 
-Database should be started with:
+For local development, I recommend using Docker at least for the database (mariadb).
 
 ```bash
-docker compose up -d
+docker compose -f compose.dev.yml up db -d
 cp .env.example .env  # or make your own
 npx prisma generate
 npx prisma migrate dev
 npx prisma seed db
 ```
 
-### Nest
-
-Use the script:
-
-```bash
-yarn start:dev
-```
-
 ### Swagger
 
 Under `localhost:3000/docs` by default.
-
-### License
-
-No info yet.
