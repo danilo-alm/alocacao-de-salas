@@ -6,23 +6,23 @@
 
 ### Containers
 
-You can use `compose.yml` to test the application or `compose.dev.yml` if you like to develop on containers.
+You can use `compose.yml` to test the application.
 
 ```bash
-docker compose up --build  # test
-docker compose -f compose.dev.yml up --build  # develop
+docker compose up --build
 ```
 
-### Locally
+### Development (Locally)
 
-For local development, I recommend using Docker at least for the database (mariadb).
+You need mariadb as your database.
 
 ```bash
-docker compose -f compose.dev.yml up db -d
+docker run -e MARIADB_USER=user -e MARIADB_PASSWORD=secret -e MARIADB_DATABASE=alocacao_de_salas -e MARIADB_ROOT_PASSWORD=root -v alocacao-de-salas_db -n alocacao-de-salas-db -p 3456:3306 -d mariadb:11.7
 cp .env.example .env  # or make your own
 npx prisma generate
 npx prisma migrate dev
 npx prisma seed db
+yarn start
 ```
 
 ### Swagger
