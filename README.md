@@ -17,7 +17,7 @@ docker compose up --build
 You need mariadb as your database.
 
 ```bash
-docker run -e MARIADB_USER=user -e MARIADB_PASSWORD=secret -e MARIADB_DATABASE=alocacao_de_salas -e MARIADB_ROOT_PASSWORD=root -v alocacao-de-salas_db -n alocacao-de-salas-db -p 3456:3306 -d mariadb:11.7
+docker compose -f db.compose.yml up -d  # mariadb
 cp .env.example .env  # or make your own
 npx prisma generate
 npx prisma migrate dev
