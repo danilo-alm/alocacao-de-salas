@@ -2,19 +2,17 @@
 
 > Still under development. Not meant to be used for now.
 
-## Development
+## Running
 
-### Containers
-
-You can use `compose.yml` to test the application.
+You can use `compose.yml` to run the app.
 
 ```bash
 docker compose up --build
 ```
 
-### Development (Locally)
+## Development
 
-You need mariadb as your database.
+You will need mariadb as your database. It's easier to use docker:
 
 ```bash
 docker compose -f db.compose.yml up -d  # mariadb
