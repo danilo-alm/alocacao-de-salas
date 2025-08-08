@@ -14,8 +14,9 @@ export class AlocacaoConflictChecker {
   ): Promise<void> {
     const conflictingAlocacoes =
       await this.findConflictingAlocacoesFor(alocacao);
-
-    if (conflictingAlocacoes.length > 0) {
+    
+    const conflictingAlocacoesExist = conflictingAlocacoes.length > 0;
+    if (conflictingAlocacoesExist) {
       throw new BookingConflictException(
         `A alocação conflita com as alocações existentes: ${conflictingAlocacoes.join(', ')}`,
       );
