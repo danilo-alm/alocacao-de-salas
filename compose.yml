@@ -23,7 +23,7 @@ services:
       - data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      start_period: 4s
+      start_period: 3s
       interval: 3s
       timeout: 5s
       retries: 3
