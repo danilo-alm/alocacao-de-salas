@@ -44,6 +44,15 @@ export class AlocacaoService {
     return DtoMapper.toDto(AlocacaoResponseDto, alocacao);
   }
 
+  async checkAvailability(
+    createAlocacaoDto: CreateAlocacaoDto
+  ): Promise<boolean> {
+    const conflicts = await this.conflictChecker.findConflictingAlocacoesFor(
+      createAlocacaoDto as AlocacaoScheduleDetails,
+    )
+    return conflicts.length > 0;
+  }
+  
   async findOne(id: number): Promise<AlocacaoResponseDto> {
     const result = await this.prisma.alocacao.findFirstOrThrow({
       where: { id: id, deleted_at: null },
