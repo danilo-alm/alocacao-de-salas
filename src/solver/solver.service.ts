@@ -39,7 +39,7 @@ export class SolverService {
     req.salas.forEach(sala => {
       this.CLASSROOM_TIME_SLOTS.forEach(timeSlot => {
         const room_time_string = `${sala.id}_${timeSlot[0]}`
-        
+        //validate
         // Each room time-slot can only have one discipline
         constraints[room_time_string] = {"max": 1}
 
@@ -57,6 +57,26 @@ export class SolverService {
             [`${room_time_string}`]: 1
           }
         })
+      })
+    })
+    
+    req.salas.forEach(s => {
+      this.CLASSROOM_TIME_SLOTS.forEach(t => {
+        const room_time_string = `${s.id}_${t[0]}-${t[1]}`
+
+        // Each room time-slot can only have one discipline
+        constraints[room_time_string] = {"max": 1}
+      })
+
+      req.pending.forEach(p => {
+          const uid = p.uniqueId;
+          const room_time_string = `${s.id}_${p.hora_inicio}-${p.hora_fim}`
+
+          variables[`${uid}_${room_time_string}`] = {
+            "allocated": 1,
+            [`${uid}_one_slot`]: 1,
+            [`${room_time_string}`]: 1
+          }
       })
     })
     
