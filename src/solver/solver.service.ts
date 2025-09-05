@@ -30,12 +30,9 @@ export class SolverService {
     const constraints: Map<string, Constraint> = new Map();
     const variables: Map<string, Map<string, number>> = new Map();
 
-    for (let i = 0; i < req.pending.length; i++) {
-      req.pending[i].uniqueId = randomUUID()
-    }
-
     // Each discipline available get's one slot
     req.pending.forEach(d => {
+      d.uniqueId = randomUUID();
       constraints[`${d.uniqueId}_one_slot`] = {"equal": 1}
     })
 
