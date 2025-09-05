@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { Constraint, Model } from 'yalps';
+import { Constraint, Model, Solution, solve } from 'yalps';
 
 import { SolverRequestDto } from './dto/solver-request.dto';
 
@@ -14,8 +14,19 @@ export class SolverService {
     ["16:10", "17:00"],
     ["17:10", "17:50"]
   ]
-    
-  makeModel(req: SolverRequestDto): Model {
+  
+  handleRequest(req: SolverRequestDto): any {
+    const model = this.makeModel(req);
+    const solution = this.solveModel(model);
+
+    return solution
+  }
+
+  private solveModel(model: Model): Solution<string> {
+    return solve(model);
+  }
+
+  private makeModel(req: SolverRequestDto): Model {
     const constraints: Map<string, Constraint> = new Map();
     const variables: Map<string, Map<string, number>> = new Map();
 
@@ -59,4 +70,5 @@ export class SolverService {
       variables
     }
   }
+
 }
