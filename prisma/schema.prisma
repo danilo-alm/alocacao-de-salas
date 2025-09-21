@@ -47,8 +47,10 @@ model sala {
 
 model disciplina {
   id            Int         @id @default(autoincrement())
-  nome          String      @unique
+  nome          String      
+  turma         String      @default("A")
   alocacoes     alocacao[]
+  @@unique([nome, turma], name: "uq_disciplina_nome_turma")
 }
 
 model alocacao {

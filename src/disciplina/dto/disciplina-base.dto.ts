@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { disciplina } from 'src/generated/prisma/client';
 
 export class DisciplinaBaseDto implements disciplina {
@@ -14,4 +14,10 @@ export class DisciplinaBaseDto implements disciplina {
   @IsNotEmpty()
   @Expose()
   nome: string;
+
+  @ApiProperty({description: 'Turma', example: 'A'})
+  @IsString()
+  @IsOptional()
+  @Expose()
+  turma: string;
 }
